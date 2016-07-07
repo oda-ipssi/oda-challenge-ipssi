@@ -17,7 +17,7 @@ class EntrustSetupTables extends Migration
             $table->string('name')->unique();
             $table->string('display_name')->nullable();
             $table->string('description')->nullable();
-            $table->boolean('is_deletabled')->default(true);
+            $table->boolean('is_deletable')->default(true);
             $table->timestamps();
         });
 
@@ -40,7 +40,7 @@ class EntrustSetupTables extends Migration
             $table->string('name')->unique();
             $table->string('display_name')->nullable();
             $table->string('description')->nullable();
-            $table->boolean('is_deletabled')->default(true);
+            $table->boolean('is_deletable')->default(true);
             $table->timestamps();
         });
 
