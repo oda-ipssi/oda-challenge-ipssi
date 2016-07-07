@@ -23,8 +23,8 @@ class RoleRequest extends Request
   {
     return [
       'name' => 'required|min:2|max:20|alpha',
-      'display_name' => 'required|min:2|max:20|alpha',
-      'description' => 'required|min:10|max:250'
+      'display_name' => 'max:20|alpha',
+      'description' => 'alpha|max:250'
     ];
   }
 
@@ -37,24 +37,13 @@ class RoleRequest extends Request
   public function messages()
   {
     return [
-        'type_person.required' => 'Veuillez nous préciser qui vous êtes',
-        'type_search.required' => 'Veuillez nous préciser l\'objet de votre demande',
-        'prenom.required' => 'Veuillez saisir votre prénom',
-        'prenom.alpha' => 'Le prénom doit contenir des lettres uniquement',
-        'prenom.min' => 'Le prénom doit contenir au minimum 2 caractères',
-        'prenom.max' => 'Le prénom ne doit pas contenir plus de 20 caractères',
-        'nom.required' => 'Veuillez saisir votre nom',
-        'nom.alpha' => 'Le prénom doit contenir des lettres uniquement',
-        'nom.min' => 'Le nom doit contenir au minimum 2 caractères',
-        'nom.max' => 'Le nom ne doit pas contenir plus de 20 caractères',
-        'phone.required' => 'Veuillez saisir votre numéro de téléphone',
-        'phone.min' => 'Le numéro de téléphone doit contenir au minimum 8 caractères',
-        'phone.max' => 'Le numéro de téléphone ne doit pas contenir plus de 30 caractères',
-        'email.email' => 'Veuillez saisir votre adresse e-mail',
-        'email.email' => 'Veuillez saisir une adresse e-mail valide',
-        'message.required' => 'Veuillez saisir votre message',
-        'message.max' => 'Votre message doit contenir au minimum 10 caractères',
-        'message.max' => 'Votre message ne peux pas excéder 250 caractères'
+        'name.required' => 'Veuillez saisir un nom',
+        'name.alpha' => 'Le nom doit contenir des lettres uniquement',
+        'name.min' => 'Le nom doit contenir au minimum 2 caractères',
+        'name.max' => 'Le nom ne doit pas contenir plus de 20 caractères',
+        'display_name.alpha' => 'Le label doit contenir des lettres uniquement',
+        'display_name.max' => 'Le label ne doit pas contenir plus de 20 caractères',
+        'description.max' => 'Votre description ne peux pas excéder 250 caractères'
     ];
   }
 
