@@ -22,9 +22,11 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(RoleRepository $role_gestion)
+    public function index(RoleRepository $roleManager)
     {
-        return view('role.index', $role_gestion);
+        return response()->json([
+            'roles' => $roleManager
+        ]);
     }
 
     /**
@@ -43,13 +45,11 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(
-      RoleRequest $request,
-      RoleRepository $role_gestion)
+    public function store(RoleRequest $request, RoleRepository $roleManager)
     {
-      $role_gestion->store($request->all());
+        $roleManager->store($request->all());
 
-      return redirect('/role')->with('ok', 'Rôle ajouté !');
+        return redirect('/role')->with('ok', 'Rôle ajouté !');
     }
 
     /**
