@@ -30,5 +30,6 @@ class Kernel extends ConsoleKernel
         //          ->hourly();
         $shedule->command('emails:reminder')
                     ->monthly();
+
     }
 }
