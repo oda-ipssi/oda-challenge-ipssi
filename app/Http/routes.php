@@ -15,4 +15,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/send', 'EmailController@sendEmailReminder');
+Route::get('/send/{id}', ['uses' =>'EmailController@sendEmailReminder', 'as'=>'reminderEmail']);
+
