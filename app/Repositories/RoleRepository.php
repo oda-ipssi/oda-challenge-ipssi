@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 use App\Models\Role;
+use App\User;
 
 class RoleRepository extends BaseRepository
 {
@@ -10,10 +11,14 @@ class RoleRepository extends BaseRepository
 		$this->model = $role;
 	}
 
-  public function index()
+  public function indexRoles()
   {
-    $listRole = $this->role;
-    dd($listRole);
+    return Role::all();
+  }
+
+  public function indexUsers()
+  {
+    return User::all();
   }
 
   public function store($inputs)
@@ -23,7 +28,11 @@ class RoleRepository extends BaseRepository
     $owner->display_name = $inputs['display_name'];
     $owner->description  = $inputs['description'];
     $owner->save();
+	}
 
+  public function edit($inputs)
+	{
+    
 	}
 
 }

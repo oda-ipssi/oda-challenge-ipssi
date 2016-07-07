@@ -25,7 +25,8 @@ class RoleController extends Controller
     public function index(RoleRepository $roleManager)
     {
         return response()->json([
-            'roles' => $roleManager
+            'roles' => $roleManager->indexRoles(),
+            'users' => $roleManager->indexUsers(),
         ]);
     }
 
@@ -49,19 +50,9 @@ class RoleController extends Controller
     {
         $roleManager->store($request->all());
 
-        return redirect('/role')->with('ok', 'Rôle ajouté !');
+        return redirect('/role')->with('message', 'Rôle ajouté !');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -69,21 +60,11 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(RoleRequest $request, RoleRepository $roleManager, $id)
     {
-        //
-    }
+        $roleManager->edit($request->all());
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        return redirect('/role')->with('message', 'Rôle modifié !');
     }
 
     /**
