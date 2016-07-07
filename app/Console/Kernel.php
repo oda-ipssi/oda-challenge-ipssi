@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         // Commands\Inspire::class,
         'App\Console\Commands\Prospect',
+
     ];
 
     /**
@@ -25,7 +26,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('emails:reminder')
-                 ->Monthly();
+        // $schedule->command('inspire')
+        //          ->hourly();
+        $shedule->command('emails:reminder')
+                    ->monthly();
+
     }
 }
