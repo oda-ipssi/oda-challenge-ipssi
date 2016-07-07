@@ -26,6 +26,6 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('emails:reminder')
-                 ->everyMonthly();
+                 ->Monthly();
     }
 }
