@@ -1,25 +1,18 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
+// ----------------------------------------------------------------------------------------------------
+// ACCUEIL
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'IndexController@index');
 
-Route::resource('role', 'RoleController');
 
-// Route::auth();
+// TEST
+Route::get('test', 'TestController@index');
+Route::get('test/scan', 'TestController@scanPermissions');
 
-Route::get('/home', 'HomeController@index');
+
+// ----------------------------------------------------------------------------------------------------
+// AUTHENTIFICATION
 
 // // Authentication Routes...
 // $this->get('login', 'Auth\AuthController@showLoginForm');
@@ -35,6 +28,18 @@ Route::get('/home', 'HomeController@index');
 // $this->post('password/email', 'Auth\PasswordController@sendResetLinkEmail');
 // $this->post('password/reset', 'Auth\PasswordController@reset');
 
-Route::auth();
+Route::auth(); // Contient l'ensemble des routes ci-dessus
 
-Route::get('/home', 'HomeController@index');
+// ----------------------------------------------------------------------------------------------------
+// ROUTES AVEC AUTHENTIFICATION
+
+// Ex: admin/role, admin/permission, etc.
+
+Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
+
+    // Gestion des rôles
+    Route::resource('role', 'RoleController');
+
+    // Gestion des permissions
+    Route::resource('permission', 'PermissionController');
+});
