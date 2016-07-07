@@ -1,0 +1,1 @@
+/etc/init.d/mysql: ERROR: The partition with /var/lib/mysql is too full! ... failed!

@@ -16,7 +16,8 @@ class Data extends Model
     protected $fillable = [
         'is_public',
         'user_id',
-        'path'
+        'path',
+        'content'
     ];
 
     protected $guarded = [];
