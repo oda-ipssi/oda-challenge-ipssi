@@ -14,10 +14,10 @@ class CreateDatasTable extends Migration {
 	{
 		Schema::create('datas', function(Blueprint $table)
 		{
-			$table->integer('id', true);
+			$table->integer('id',true);
 			$table->boolean('is_public')->nullable();
-			$table->integer('user_id',false,true);
-			$table->text('content', 65535)->nullable();
+			$table->integer('user_id',false,false);
+			$table->string('path', 256);
 		});
 	}
 
