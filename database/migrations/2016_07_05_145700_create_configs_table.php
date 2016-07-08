@@ -14,7 +14,7 @@ class CreateConfigsTable extends Migration {
 	{
 		Schema::create('configs', function(Blueprint $table)
 		{
-			$table->integer('id', true);
+			$table->integer('id',true);
 			$table->string('param', 45)->nullable();
 			$table->string('value', 55)->nullable();
 		});
