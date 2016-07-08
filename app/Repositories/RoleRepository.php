@@ -32,7 +32,7 @@ class RoleRepository extends BaseRepository
 
   public function edit($inputs)
 	{
-    
+
 	}
 
 }

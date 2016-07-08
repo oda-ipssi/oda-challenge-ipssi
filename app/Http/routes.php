@@ -1,6 +1,5 @@
 <?php
 
-<<<<<<< HEAD
 // ----------------------------------------------------------------------------------------------------
 // ACCUEIL
 
@@ -44,7 +43,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
     // Gestion des permissions
     Route::resource('permission', 'PermissionController');
 });
-=======
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -56,10 +55,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::get('/send/{id}', ['uses' =>'EmailController@sendEmailReminder', 'as'=>'reminderEmail']);
-
->>>>>>> master
