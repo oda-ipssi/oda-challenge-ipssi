@@ -15,7 +15,7 @@ class CreateOffersTable extends Migration
         Schema::create('offers', function(Blueprint $table) {
             $table->integer('id',true);
             $table->string('title', 45)->nullable();
-            $table->string('description', 45)->nullable();
+            $table->text('description')->nullable();
             $table->integer('database_limit')->nullable();
             $table->float('price', 10, 0)->nullable();
         });
