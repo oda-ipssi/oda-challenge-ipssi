@@ -2,10 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Requests\Request;
+
 class UserRequest extends Request
 {
-
-   /**
+    /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
@@ -22,15 +23,14 @@ class UserRequest extends Request
      */
     public function rules()
     {
-
         return [
-            'email' => 'required|unique',
-            'firstname' => 'max:45',
-            'password' => 'required',
-            'lastname' => 'max:45',
-            'address' => 'max:45',
+            'email' => 'required|unique:users,email',
+            'username' => 'required|max:45',
+            'firstname' => 'required|max:45',
+            'lastname' => 'required|max:45',
+            'address' => 'max:255',
+            'city' => 'max:45',
             'phone' => 'max:45',
-            'ip' => 'max:15',
         ];
     }
 
@@ -38,6 +38,7 @@ class UserRequest extends Request
     {
         return [
             'email' => trans('user.data_validator.email'),
+            'username' => trans('user.data_validator.username'),
             'firstname' => trans('user.data_validator.firstname'),
             'lastname' => trans('user.data_validator.lastname'),
             'address' => trans('user.data_validator.address'),

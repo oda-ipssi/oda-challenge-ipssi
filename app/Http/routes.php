@@ -19,6 +19,7 @@ Route::auth();
 
 Route::get('/home', 'HomeController@index');
 
-Route::resource('/user', 'UserController');
+Route::get('/account/{id}', 'AccountController@show');
+Route::put('/account/{id}', 'AccountController@update');
 
 Route::get('/send/{id}', ['uses' =>'EmailController@sendEmailReminder', 'as'=>'reminderEmail']);
