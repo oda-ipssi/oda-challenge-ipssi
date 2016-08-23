@@ -15,5 +15,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/send/{id}', ['uses' =>'EmailController@sendEmailReminder', 'as'=>'reminderEmail']);
+Route::auth();
 
+Route::get('/home', 'HomeController@index');
+
+Route::put('/account/{id}/password', 'AccountController@editPassword');
+Route::get('/account/{id}', 'AccountController@show');
+Route::put('/account/{id}', 'AccountController@update');
+
+Route::get('/send/{id}', ['uses' =>'EmailController@sendEmailReminder', 'as'=>'reminderEmail']);
