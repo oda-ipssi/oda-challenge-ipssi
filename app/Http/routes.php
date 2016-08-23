@@ -17,5 +17,19 @@ Route::get('/', function () {
 
 Route::get('/send/{id}', ['uses' =>'EmailController@sendEmailReminder', 'as'=>'reminderEmail']);
 
-Route::resource('content', 'ContentController');
+
+
+
+Route::get('/{url}', ['uses' =>'ContentController@show']);
+
+Route::get('/content/all', ['uses' =>'ContentController@index']);
+
+Route::post('/content/store', ['uses' =>'ContentController@store']);
+
+Route::get('/content/{url}/edit', ['uses' =>'ContentController@edit']);
+
+Route::post('/content/{url}/update', ['uses' =>'ContentController@update']);
+
+Route::delete('/content/{id}', ['uses' =>'ContentController@destroy']);
+
 
