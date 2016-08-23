@@ -19,6 +19,7 @@ Route::auth();
 
 Route::get('/home', 'HomeController@index');
 
+Route::put('/account/{id}/password', 'AccountController@editPassword');
 Route::get('/account/{id}', 'AccountController@show');
 Route::put('/account/{id}', 'AccountController@update');
 
