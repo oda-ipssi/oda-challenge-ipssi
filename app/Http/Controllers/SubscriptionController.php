@@ -74,9 +74,8 @@ class SubscriptionController extends Controller
 
     	$html = '
     		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    		
-    	';
 
+    	';
 
     	$pdf = App::make('dompdf.wrapper');
 		$pdf->loadHTML($html)->save('invoice.pdf');
