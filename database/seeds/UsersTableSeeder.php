@@ -1,11 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-<<<<<<< HEAD
-use App\User;
-=======
+use App\Models\User;
 use Carbon\Carbon;
->>>>>>> master
 
 class UsersTableSeeder extends Seeder
 {
@@ -16,27 +13,27 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-<<<<<<< HEAD
 
         User::create([
-            'name' => 'admin',
+            'username' => 'admin',
+            'firstname' => 'Admin',
             'email' => 'admin@ipssi-lyon.com',
             'password' => bcrypt('0000'),
         ]);
 
         User::create([
-            'name' => 'customer',
+            'username' => 'customer',
+            'firstname' => 'Customer',
             'email' => 'customer@ipssi-lyon.com',
             'password' => bcrypt('0000'),
         ]);
 
         User::create([
-            'name' => 'registered',
+            'username' => 'registered',
+            'firstname' => 'Registered',
             'email' => 'registered@ipssi-lyon.com',
             'password' => bcrypt('0000'),
         ]);
-=======
        factory(App\Models\User::class, 10)->create();
->>>>>>> master
     }
 }

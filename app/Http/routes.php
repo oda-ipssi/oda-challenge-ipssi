@@ -30,6 +30,16 @@ Route::get('test/scan', 'TestController@scanPermissions');
 
 Route::auth(); // Contient l'ensemble des routes ci-dessus
 
+// Gestion des rôles
+Route::resource('role', 'RoleController', ['except' => [
+    'show', 'create', 'edit'
+]]);
+
+// Gestion des permissions
+Route::resource('permission', 'PermissionController', ['except' => [
+    'show', 'create', 'edit'
+]]);
+
 // ----------------------------------------------------------------------------------------------------
 // ROUTES AVEC AUTHENTIFICATION
 
@@ -37,11 +47,7 @@ Route::auth(); // Contient l'ensemble des routes ci-dessus
 
 Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
 
-    // Gestion des rôles
-    Route::resource('role', 'RoleController');
 
-    // Gestion des permissions
-    Route::resource('permission', 'PermissionController');
 });
 
 /*

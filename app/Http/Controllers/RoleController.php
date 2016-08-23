@@ -11,10 +11,9 @@ use App\Repositories\RoleRepository;
 class RoleController extends Controller
 {
 
-
     public function __construct(RoleRepository $role_gestion)
     {
-      $this->role_gestion = $role_gestion;
+      $this->RoleRepository = $role_gestion;
     }
 
     /**
@@ -31,16 +30,6 @@ class RoleController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-      return view('role.addRole');
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -49,22 +38,18 @@ class RoleController extends Controller
     public function store(RoleRequest $request, RoleRepository $roleManager)
     {
         $roleManager->store($request->all());
-
-        return redirect('/role')->with('message', 'Rôle ajouté !');
     }
 
-
     /**
-     * Show the form for editing the specified resource.
+     * Update the specified resource in storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(RoleRequest $request, RoleRepository $roleManager, $id)
+    public function update(RoleRequest $request, $id)
     {
-        $roleManager->edit($request->all());
-
-        return redirect('/role')->with('message', 'Rôle modifié !');
+        $this->RoleRepository->update($request->all(), $id);
     }
 
     /**
@@ -75,6 +60,6 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->RoleRepository->destroy($id);
     }
 }

@@ -4,6 +4,10 @@ namespace App\Http\Requests;
 
 class RoleRequest extends Request
 {
+    public function __construct() {
+        parent::__construct();
+    }
+
     /**
     * Determine if the user is authorized to make this request.
     *
@@ -11,19 +15,19 @@ class RoleRequest extends Request
     */
     public function authorize()
     {
-      return true;
+        return true;
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
+    * Get the validation rules that apply to the request.
+    *
+    * @return array
+    */
     public function rules()
     {
         return [
             'name' => 'required|min:2|max:20|unique:roles',
-            'display_name' => 'required|max:50',
+            'display_name' => 'max:50',
             'description' => 'max:250'
         ];
     }

@@ -19,8 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('firstname', 45);
             $table->string('lastname', 45);
-            $table->string('address', 45);
-            $table->integer('zipcode');
+            $table->string('address', 255);
+            $table->string('zipcode',45);
             $table->string('city', 45);
             $table->string('phone', 45);
             $table->string('ip',15);

@@ -9,37 +9,32 @@ class Permission extends EntrustPermission
         return [
             // Gestion rôles
             'role_index',
-            'role_show',
-            'role_create',
-            'role_update',
-            'role_delete',
             'role_store',
+            'role_update',
+            'role_editPermission',
+            'role_updatePermission',
+            'role_destroy',
             // Gestion permissions
             'permission_index',
-            'permission_show',
-            'permission_create',
-            'permission_update',
-            'permission_delete',
             'permission_store',
+            'permission_update',
+            'permission_destroy',
             // Gestion utilisateurs
             'user_index',
-            'user_show',
-            'user_create',
-            'user_update',
-            'user_delete',
             'user_store',
+            'user_update',
+            'user_destroy',
             // Gestion profil / compte utilisateur
             'user_profile_show',
             'user_profile_update_info',
             'user_profile_update_password',
-            'user_profile_delete',
+            'user_profile_destroy',
             'customer_subscribe',
             // Gestion des offres
-            'offer_show',
-            'offer_create',
+            'offer_index',
+            'offer_store',
             'offer_update',
-            'offer_delete',
-            'offer_store'
+            'offer_destroy'
         ];
     }
 }
