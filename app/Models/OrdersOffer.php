@@ -5,19 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Data
+ * Class OrdersOffer
  */
-class Data extends Model
+class OrdersOffer extends Model
 {
-    protected $table = 'datas';
+    protected $table = 'orders_offers';
 
     public $timestamps = false;
 
     protected $fillable = [
-        'is_public',
-        'user_id',
-        'path',
-        'content'
+        'offer_id',
+        'order_id'
     ];
 
     protected $guarded = [];
