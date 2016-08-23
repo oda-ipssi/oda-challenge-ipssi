@@ -2,15 +2,18 @@
 namespace App\Repositories;
 
  use App\Models\User;
-/**
+ use Illuminate\Hashing\BcryptHasher;
+
+ /**
  * Class UserRepository
  */
 class UserRepository
 {
-
     /**
      * @param $data
+     * @param User $user
      * @return User
+     * @throws \Exception
      */
     public function store($data, User $user) {
 
@@ -22,9 +25,15 @@ class UserRepository
         $user->zipcode = $data['zipcode'];
         $user->city = $data['city'];
         $user->phone = $data['phone'];
+        $user->ip = $_SERVER['REMOTE_ADDR'];
 
-        $user->save();
+        if($data['password']){
+            $bcrypHasher = new BcryptHasher();
+            $user->password = $bcrypHasher->make($data['password']);
+        }
+        $user->is_prospect = isset($data['is_prospect']) ? $data['is_prospect'] : false;
 
         return $user;
+
     }
 }
