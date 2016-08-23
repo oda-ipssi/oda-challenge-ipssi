@@ -17,3 +17,5 @@ Route::get('/', function () {
 
 Route::get('/send/{id}', ['uses' =>'EmailController@sendEmailReminder', 'as'=>'reminderEmail']);
 
+Route::resource('content', 'ContentController');
+
