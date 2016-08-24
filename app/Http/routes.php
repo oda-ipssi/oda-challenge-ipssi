@@ -19,7 +19,7 @@ Route::auth();
 
 Route::get('/home', 'HomeController@index');
 
-Route::get('/content/{url}', ['uses' =>'ContentController@show']);
+Route::get('/{url}', ['uses' =>'ContentController@show']);
 
 Route::get('/content/all', ['uses' =>'ContentController@index']);
 
@@ -40,5 +40,4 @@ Route::put('/account/{id}', 'AccountController@update');
 Route::get('/send/{id}', ['uses' =>'EmailController@sendEmailReminder', 'as'=>'reminderEmail']);
 
 Route::get('/payment','PaymentController@index');
-
 Route::get('/payment/{id}/{mode?}','PaymentController@generateForm')->where(['id' => '[0-9]+']);

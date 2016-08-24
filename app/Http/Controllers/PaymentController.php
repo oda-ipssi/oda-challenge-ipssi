@@ -14,15 +14,17 @@ use Exception;
 
 class PaymentController extends Controller
 {
+    private $offers;
     private $payzen;
 
     public function __construct()
     {
+        $this->offers = Offer::all()->toArray();
         $this->payzen = new PayzenManager();
+
     }
 
     public function index(){
-        //Temporary view waiting for Angular handling to be merged
         $offers = $this->payzen->getOffers();
         for($i = 0; $i <= 1; $i++) {
             foreach ($offers as $offer) {
@@ -36,7 +38,7 @@ class PaymentController extends Controller
                     echo 'annuelle ';
                 }
                 echo " {$offer['id']} : {$offer['title']} --- {$offer['description']}";
-                echo '</a><br /><br />';
+                echo '</a><br />';
             }
             echo "<br /><br />";
         }
@@ -44,8 +46,7 @@ class PaymentController extends Controller
 
     public function generateForm($id,$mode = null){
         //Test if offer exist if not set to null
-        $offerData = Offer::find($id);
-        $chosenOffer = !is_null($offerData) ? $offerData->toArray() : null;
+        $chosenOffer = !is_null(Offer::find($id)) ? Offer::find($id)->toArray() : null;
 
         //Setting up form option to merge with default parameters (set in thne PayzenManager & config files)
         // Test if payement is annual or monthly and change payment method
