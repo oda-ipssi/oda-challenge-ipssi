@@ -10,7 +10,7 @@
 
 		<p>Pour la finaliser, veuillez cliquer sur ce lien:</p>
 
-			<a href="{{$url}}">Valider votre compte !</a>
+		<a href="{{$url}}">Valider votre compte !</a>
 
 		<p>Nous espérons avoir l'occasion d'échanger avec vous prochainement.</p>
 

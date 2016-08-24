@@ -64,19 +64,17 @@ class AccountController extends Controller
      */
     public function update($id, UserRequest $userRequest)
     {
-        if($userRequest->ajax()) {
 
-            try{
+        try{
 
-                $accountUser = $this->userRepository->editUserInformation($userRequest->get('data'), User::findOrFail($id));
+            $accountUser = $this->userRepository->editUserInformation($userRequest->get('data'), User::findOrFail($id));
 
-                return $this->helper->createResponse($accountUser, 200, trans('user.edit.success'));
+            return $this->helper->createResponse($accountUser, 200, trans('user.edit.success'));
 
-            } catch (ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
 
-                return $this->helper->createResponse("", 404, trans('user.response.notfound'));
+            return $this->helper->createResponse("", 404, trans('user.response.notfound'));
 
-            }
         }
 
     }
@@ -103,9 +101,7 @@ class AccountController extends Controller
             /** @var \Illuminate\Validation\Validator $passwordValidated */
             if($passwordValidated->passes()) {
 
-                $validation = $bcrypHasher->check($password, $user->password);
-
-                if ($validation) {
+                if ($bcrypHasher->check($password, $user->password)) {
 
                     $newPasswordValidated = Validator::make($request->all(), [
                         'new_password' => 'required|different:password'
@@ -113,22 +109,12 @@ class AccountController extends Controller
 
                     /** @var \Illuminate\Validation\Validator $newPasswordValidated */
                     if ($newPasswordValidated->passes()) {
-
                         return $this->helper->createResponse($this->userRepository->editUserPassword($newPassword,$user), 200, trans('user.edit.success', [], 'user'));
-
-                    } else {
-
-                        return $this->helper->createResponse("", 422, trans('user.response.error', [], 'user'));
-
                     }
+
                 } else {
-
                     return $this->helper->createResponse("", 422, trans('user.response.error', [], 'user'));
-
                 }
-            }else {
-
-                return $this->helper->createResponse("", 422, trans('user.response.error', [], 'user'));
 
             }
         }

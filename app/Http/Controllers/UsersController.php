@@ -42,20 +42,17 @@ class UsersController extends Controller
      */
     public function createUser(UserRequest $userRequest) {
 
-        //dd($userRequest->get('data'));
-
         $newUser = $this->userRepository->createUser($userRequest->get('data'));
         $newUser->save();
 
-        $url = route('userValidation', ['token' => $newUser->validation_token]);
-
-        $this->helper->sendMail($newUser, 'noreply@oda.com', trans('user.register.validation', [], 'user'), 'emails.validation', ['url' => $url]);
+        /* TODO TEST WITH THE MAIL SERVER CONFIGURED */
+        // $url = route('userValidation', ['token' => $newUser->validation_token]);
+        //$this->helper->sendMail($newUser, 'noreply@oda.com', trans('user.register.validation', [], 'user'), 'emails.validation', ['url' => $url]);
 
         return $this->helper->createResponse($newUser, 200, trans("user.response.success", [], 'user'));
 
-
-
     }
+
 
     /**
      * @param $token
@@ -64,15 +61,17 @@ class UsersController extends Controller
 
     public function validateUserAccount($token){
 
-        $user = User::where('validation_token',$token)->first();
+        $user = User::where('validation_token', $token)->first();
 
         if($user){
-            $this->userRepository->validateUser($user);
-            /* TODO redirect on the login page */
-            return redirect()->route('home');
+            $user = $this->userRepository->validateUser($user);
+            $user->save();
+
+            return $this->helper->createResponse($user, 200, trans("user.response.success", [], 'user'));
+
         }
 
-
     }
+
 
 }
