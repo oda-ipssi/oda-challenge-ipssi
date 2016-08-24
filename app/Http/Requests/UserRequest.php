@@ -23,15 +23,16 @@ class UserRequest extends Request
      */
     public function rules()
     {
+        //dd($this->request->get('data'));
         return [
-            'email' => 'required|unique:users,email',
-            'username' => 'required|max:45',
-            'firstname' => 'required|max:45',
-            'lastname' => 'required|max:45',
-            'address' => 'max:255',
-            'zipcode' => 'max:45',
-            'city' => 'max:45',
-            'phone' => 'max:45',
+            '*.email' => 'required|unique:users,email',
+            '*.username' => 'required|max:45',
+            '*.firstname' => 'required|max:45',
+            '*.lastname' => 'required|max:45',
+            '*.address' => 'max:255',
+            '*.zipcode' => 'max:45',
+            '*.city' => 'max:45',
+            '*.phone' => 'max:45',
         ];
     }
 

@@ -42,17 +42,36 @@ class UsersController extends Controller
      */
     public function createUser(UserRequest $userRequest) {
 
-        if($userRequest->ajax()) {
+        //dd($userRequest->get('data'));
 
-            $newUser = $this->userRepository->store($userRequest->get('data'), new User());
+        $newUser = $this->userRepository->createUser($userRequest->get('data'));
+        $newUser->save();
 
-            $this->helper->sendWelcomeMail($newUser, 'oda@gmail.com', trans('user.register.success', [], 'user'));
+        $url = route('userValidation', ['token' => $newUser->validation_token]);
 
-            return $this->helper->createResponse($newUser, 200, trans("user.response.success", [], 'user'));
+        $this->helper->sendMail($newUser, 'noreply@oda.com', trans('user.register.validation', [], 'user'), 'emails.validation', ['url' => $url]);
 
+        return $this->helper->createResponse($newUser, 200, trans("user.response.success", [], 'user'));
+
+
+
+    }
+
+    /**
+     * @param $token
+     * @return \Illuminate\Http\RedirectResponse
+     */
+
+    public function validateUserAccount($token){
+
+        $user = User::where('validation_token',$token)->first();
+
+        if($user){
+            $this->userRepository->validateUser($user);
+            /* TODO redirect on the login page */
+            return redirect()->route('home');
         }
 
-        return $this->helper->createResponse("", 422, trans("user.response.error"));
 
     }
 

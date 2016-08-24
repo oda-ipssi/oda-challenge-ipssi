@@ -68,7 +68,7 @@ class AccountController extends Controller
 
             try{
 
-                $accountUser = $this->userRepository->store($userRequest->get('data'), User::findOrFail($id));
+                $accountUser = $this->userRepository->editUserInformation($userRequest->get('data'), User::findOrFail($id));
 
                 return $this->helper->createResponse($accountUser, 200, trans('user.edit.success'));
 
@@ -101,9 +101,10 @@ class AccountController extends Controller
             ]);
 
             /** @var \Illuminate\Validation\Validator $passwordValidated */
-            if(!$passwordValidated->fails()) {
+            if($passwordValidated->passes()) {
 
                 $validation = $bcrypHasher->check($password, $user->password);
+
                 if ($validation) {
 
                     $newPasswordValidated = Validator::make($request->all(), [
@@ -111,20 +112,24 @@ class AccountController extends Controller
                     ]);
 
                     /** @var \Illuminate\Validation\Validator $newPasswordValidated */
-                    if ($newPasswordValidated->fails()) {
-                        return $this->helper->createResponse("", 422, "fail");
-                    } else {
-                        $user->password = $bcrypHasher->make($newPassword);
-                        $user->save();
+                    if ($newPasswordValidated->passes()) {
 
-                        return $this->helper->createResponse($user, 200, trans('user.edit.success', [], 'user'));
+                        return $this->helper->createResponse($this->userRepository->editUserPassword($newPassword,$user), 200, trans('user.edit.success', [], 'user'));
+
+                    } else {
+
+                        return $this->helper->createResponse("", 422, trans('user.response.error', [], 'user'));
+
                     }
                 } else {
+
                     return $this->helper->createResponse("", 422, trans('user.response.error', [], 'user'));
 
                 }
             }else {
+
                 return $this->helper->createResponse("", 422, trans('user.response.error', [], 'user'));
+
             }
         }
 

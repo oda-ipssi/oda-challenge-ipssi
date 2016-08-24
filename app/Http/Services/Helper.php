@@ -35,14 +35,15 @@ class Helper
      * @param $sender
      * @param $subject
      */
-    public function sendWelcomeMail(User $user, $sender, $subject) {
+    public function sendMail(User $user, $sender, $subject, $template, $option) {
 
-        Mail::send('emails.welcome', ['user' => $user], function ($m) use ($user, $sender, $subject) {
+        Mail::send($template, $option, function ($m) use ($user, $sender, $subject) {
             $m->from($sender, '');
 
             $m->to($user->email, $user->username)->subject($subject);
         });
 
     }
+
 
 }
