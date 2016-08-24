@@ -19,7 +19,7 @@ Route::auth();
 
 Route::get('/home', 'HomeController@index');
 
-Route::get('/{url}', ['uses' =>'ContentController@show']);
+Route::get('/content/{url}', ['uses' =>'ContentController@show']);
 
 Route::get('/content/all', ['uses' =>'ContentController@index']);
 
