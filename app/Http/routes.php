@@ -39,6 +39,7 @@ Route::put('/account/{id}', 'AccountController@update');
 
 Route::get('/send/{id}', ['uses' =>'EmailController@sendEmailReminder', 'as'=>'reminderEmail']);
 
+<<<<<<< HEAD
 Route::resource('subscription', 'SubscriptionController');
 
 Route::get('/stopSubscription/{id}', ['uses' =>'SubscriptionController@stopSubscription']);
@@ -51,3 +52,7 @@ Route::get('/downloadInvoice/{id}', ['uses' =>'SubscriptionController@downloadIn
 
 
 
+=======
+Route::get('/payment','PaymentController@index');
+Route::get('/payment/{id}/{mode?}','PaymentController@generateForm')->where(['id' => '[0-9]+']);
+>>>>>>> 930a302fec0be4951f8af50dd9080d107c542494
