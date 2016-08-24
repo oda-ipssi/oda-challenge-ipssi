@@ -19,11 +19,9 @@ class CreateOrdersTable extends Migration {
 			$table->string('status', 12)->nullable();
 			$table->integer('user_id',false,false);
 			$table->date('created_at')->nullable();
-<<<<<<< HEAD
 			$table->date('updated_at')->nullable();
-=======
 			$table->float('price');
->>>>>>> 930a302fec0be4951f8af50dd9080d107c542494
+
 		});
 	}
 
