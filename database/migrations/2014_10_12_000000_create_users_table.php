@@ -25,6 +25,8 @@ class CreateUsersTable extends Migration
             $table->string('phone', 45);
             $table->string('ip',15);
             $table->boolean('is_prospect');
+            $table->boolean('is_active');
+            $table->string('validation_token')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
