@@ -14,7 +14,7 @@ class ContentsTableSeeder extends Seeder
         DB::table('contents')->insert([
             'title' => 'Mentions légales',
             'content' => 'Hodor! Hodor hodor, HODOR hodor, hodor hodor?! Hodor, hodor. Hodor. Hodor, hodor HODOR hodor, hodor hodor, hodor, hodor hodor. Hodor hodor - hodor; hodor HODOR hodor, hodor hodor hodor! Hodor hodor - hodor hodor hodor. Hodor! Hodor hodor, hodor hodor hodor hodor HODOR hodor, hodor hodor, hodor, hodor hodor. Hodor! Hodor hodor, HODOR hodor, hodor hodor, hodor, hodor hodor. Hodor. Hodor hodor, hodor. Hodor hodor hodor hodor hodor hodor. Hodor hodor HODOR! Hodor hodor; hodor hodor hodor.',
-            'url' => '/'
+            'url' => '/mentions-legales'
         ]);
 
         DB::table('contents')->insert([
@@ -38,7 +38,7 @@ class ContentsTableSeeder extends Seeder
         DB::table('contents')->insert([
             'title' => 'Présentation de l\'entreprise',
             'content' => 'Hodor! Hodor hodor, HODOR hodor, hodor hodor?! Hodor, hodor. Hodor. Hodor, hodor HODOR hodor, hodor hodor, hodor, hodor hodor. Hodor hodor - hodor; hodor HODOR hodor, hodor hodor hodor! Hodor hodor - hodor hodor hodor. Hodor! Hodor hodor, hodor hodor hodor hodor HODOR hodor, hodor hodor, hodor, hodor hodor. Hodor! Hodor hodor, HODOR hodor, hodor hodor, hodor, hodor hodor. Hodor. Hodor hodor, hodor. Hodor hodor hodor hodor hodor hodor. Hodor hodor HODOR! Hodor hodor; hodor hodor hodor.',
-            'url' => '/'
+            'url' => '/presentation'
         ]);
     }
 }
