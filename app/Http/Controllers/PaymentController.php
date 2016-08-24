@@ -49,7 +49,7 @@ class PaymentController extends Controller
 
         //Setting up form option to merge with default parameters (set in thne PayzenManager & config files)
         // Test if payement is annual or monthly and change payment method
-        if(is_null($mode)){
+        if(is_null($mode) && !is_null($chosenOffer)){
             $mutiplier = 1;
             $paymentSettings["vads_payment_config"]= "SINGLE";
         }
