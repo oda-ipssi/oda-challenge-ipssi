@@ -34,5 +34,11 @@ return [
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
+    'payzen' => [
+        'shopId' => '91396908',
+        'testCert' => '6355938137702547',
+        'prodCert' => '',
+        'paymentUrl' => 'https://secure.payzen.eu/vads-payment/',
+    ]
 
 ];
