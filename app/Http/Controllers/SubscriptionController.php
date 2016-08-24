@@ -110,7 +110,7 @@ class SubscriptionController extends Controller
     			<body>
 		    		<center><h1>Invoice #'.$payment->id.'</h1></center>
 		    		<h2>Payment information</h2>
-		    		<p>Billing type : '.$payment->billingType.'</p>
+		    		<p>Payment method : '.$payment->paymentMethod.'</p>
 		    		<p>Card number : '.$payment->cardNumber.'</p>
 		    		<p>Expiration date : '.$payment->expirationDate.'</p>
 

@@ -16,7 +16,7 @@ class CreatePaymentsTable extends Migration
             $table->integer('id',true);
             $table->integer('user_id')->unsigned();
             $table->integer('order_id')->unsigned();
-            $table->string('billingType', 100);
+            $table->string('paymentMethod', 100);
             $table->float('amount');
             $table->float('cardNumber');
             $table->string('expirationDate', 5);

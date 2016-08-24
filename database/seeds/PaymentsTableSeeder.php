@@ -21,7 +21,7 @@ class PaymentsTableSeeder extends Seeder
             DB::table('payments')->insert([
                 'order_id' => $order->id,
                 'user_id' => $faker->randomElement($users_id)->id,
-                'billingType' => 'Credit card',
+                'paymentMethod' => 'Credit card',
                 'amount' => $faker->randomFloat($nbMaxDecimals = 2, $min = 20, $max = 150),
                 'cardNumber' => $faker->creditCardNumber(),
                 'expirationDate' => $faker->creditCardExpirationDateString() ,
