@@ -51,7 +51,6 @@ Route::post('/validation/{token}', ['uses' => 'UsersController@validateUserAccou
 
 Route::get('/send/{id}', ['uses' =>'EmailController@sendEmailReminder', 'as'=>'reminderEmail']);
 
-Route::get('/payment/offers','PaymentController@index');
+Route::get('/payment','PaymentController@index');
 
 Route::get('/payment/{id}/{mode?}','PaymentController@generateForm')->where(['id' => '[0-9]+']);
-
