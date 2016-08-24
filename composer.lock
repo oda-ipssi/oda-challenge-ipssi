@@ -4,8 +4,13 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "hash": "6509718c8c0f54249422aea023f41837",
     "content-hash": "248d120d3f62fb03dc31e5900ff631a4",
+=======
+    "hash": "15078097482f86f6842683343d62a429",
+    "content-hash": "7ce8015fc0f828ee484fd84aebbaf79d",
+>>>>>>> 8d3754e4ea59512b069dd977f6e01be877953e5e
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -264,6 +269,7 @@
             "time": "2015-11-06 14:35:42"
         },
         {
+<<<<<<< HEAD
             "name": "dompdf/dompdf",
             "version": "v0.7.0",
             "source": {
@@ -347,6 +353,30 @@
                 "ext-curl": "*",
                 "phpunit/phpunit": "^4.0",
                 "psr/log": "^1.0"
+=======
+            "name": "guzzlehttp/guzzle",
+            "version": "6.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/guzzle.git",
+                "reference": "d094e337976dff9d8e2424e8485872194e768662"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/d094e337976dff9d8e2424e8485872194e768662",
+                "reference": "d094e337976dff9d8e2424e8485872194e768662",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/promises": "~1.0",
+                "guzzlehttp/psr7": "~1.1",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "ext-curl": "*",
+                "phpunit/phpunit": "~4.0",
+                "psr/log": "~1.0"
+>>>>>>> 8d3754e4ea59512b069dd977f6e01be877953e5e
             },
             "type": "library",
             "extra": {
@@ -384,7 +414,11 @@
                 "rest",
                 "web service"
             ],
+<<<<<<< HEAD
             "time": "2016-07-15 17:22:37"
+=======
+            "time": "2016-03-21 20:02:09"
+>>>>>>> 8d3754e4ea59512b069dd977f6e01be877953e5e
         },
         {
             "name": "guzzlehttp/promises",
@@ -1183,6 +1217,7 @@
             "time": "2016-03-18 20:34:03"
         },
         {
+<<<<<<< HEAD
             "name": "phenx/php-font-lib",
             "version": "0.4",
             "source": {
@@ -1262,6 +1297,19 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
                 "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
+=======
+            "name": "psr/http-message",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-message.git",
+                "reference": "85d63699f0dbedb190bbd4b0d2b9dc707ea4c298"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/85d63699f0dbedb190bbd4b0d2b9dc707ea4c298",
+                "reference": "85d63699f0dbedb190bbd4b0d2b9dc707ea4c298",
+>>>>>>> 8d3754e4ea59512b069dd977f6e01be877953e5e
                 "shasum": ""
             },
             "require": {
@@ -1289,7 +1337,10 @@
                 }
             ],
             "description": "Common interface for HTTP messages",
+<<<<<<< HEAD
             "homepage": "https://github.com/php-fig/http-message",
+=======
+>>>>>>> 8d3754e4ea59512b069dd977f6e01be877953e5e
             "keywords": [
                 "http",
                 "http-message",
@@ -1298,7 +1349,11 @@
                 "request",
                 "response"
             ],
+<<<<<<< HEAD
             "time": "2016-08-06 14:39:51"
+=======
+            "time": "2015-05-04 20:22:00"
+>>>>>>> 8d3754e4ea59512b069dd977f6e01be877953e5e
         },
         {
             "name": "psr/log",
