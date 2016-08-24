@@ -25,7 +25,18 @@ Route::auth();
 
 Route::get('/home', 'HomeController@index');
 
-/* Route about the account */
+Route::get('/{url}', ['uses' =>'ContentController@show']);
+
+Route::get('/content/all', ['uses' =>'ContentController@index']);
+
+Route::post('/content/store', ['uses' =>'ContentController@store']);
+
+Route::get('/content/{url}/edit', ['uses' =>'ContentController@edit']);
+
+Route::post('/content/{url}/update', ['uses' =>'ContentController@update']);
+
+Route::delete('/content/{id}', ['uses' =>'ContentController@destroy']);
+
 Route::put('/account/{id}/password', 'AccountController@editPassword');
 Route::get('/account/{id}', 'AccountController@show');
 Route::put('/account/{id}', 'AccountController@update');
@@ -39,3 +50,6 @@ Route::post('/validation/{token}', ['uses' => 'UsersController@validateUserAccou
 
 
 Route::get('/send/{id}', ['uses' =>'EmailController@sendEmailReminder', 'as'=>'reminderEmail']);
+
+Route::get('/payment','PaymentController@index');
+Route::get('/payment/{id}/{mode?}','PaymentController@generateForm')->where(['id' => '[0-9]+']);
