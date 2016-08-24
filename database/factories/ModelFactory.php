@@ -28,6 +28,8 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
         'phone' => $faker->phoneNumber,
         'ip' => $faker->ipv4,
         'is_prospect' => $faker->boolean,
+        'is_active' => 0,
+        'validation_token' => null,
         'remember_token' => str_random(10),
         'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         'created_at' => Carbon::now()->format('Y-m-d H:i:s'),

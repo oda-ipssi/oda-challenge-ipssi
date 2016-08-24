@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
+use App\Http\Services\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Auth;
 use Illuminate\Hashing\BcryptHasher;
@@ -11,9 +11,7 @@ use App\Repositories\UserRepository;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\UserRequest;
-use Mockery\CountValidator\Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-
 
 
 class AccountController extends Controller
@@ -23,36 +21,24 @@ class AccountController extends Controller
      */
     private $userRepository;
 
-
+    /**
+     * @var Helper
+     */
+    private $helper;
 
     /**
      * AccountController constructor.
      * @param UserRepository $userRepository
+     * @param Helper $helper
      */
-    public function __construct(UserRepository $userRepository) {
+    public function __construct(UserRepository $userRepository, Helper $helper) {
         $this->userRepository = $userRepository;
+        $this->helper = $helper;
 
-    }
-
-
-
-    /**
-     * @param null $data
-     * @param $status
-     * @param $message
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
-     */
-    private function createResponse($data = null, $status, $message) {
-        return response([
-            'status' => $status,
-            'data' => $data,
-            'message' => $message
-        ]);
     }
 
     /**
      * Display the specified resource.
-     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -61,81 +47,76 @@ class AccountController extends Controller
         try{
 
             $user = User::findOrFail($id);
-            return $this->createResponse($user, 200, "Ok");
+            return $this->helper->createResponse($user, 200, trans("user.response.ok", [], 'user'));
 
         } catch (ModelNotFoundException $e) {
 
-            return $this->createResponse("", 404, trans("user.response.notfound"));
+            return $this->helper->createResponse("", 404, trans("user.response.notfound", [], 'user'));
 
         }
-
 
     }
 
     /**
-     * Update the specified resource in storage.
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @param UserRequest $userRequest
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
     public function update($id, UserRequest $userRequest)
     {
 
         try{
 
-            $accountUser = $this->userRepository->store($userRequest->get('data'), User::findOrFail($id));
+            $accountUser = $this->userRepository->editUserInformation($userRequest->get('data'), User::findOrFail($id));
 
-            return $this->createResponse($accountUser, 200, trans('user.edit.success'));
+            return $this->helper->createResponse($accountUser, 200, trans('user.edit.success'));
 
         } catch (ModelNotFoundException $e) {
 
-            return $this->createResponse("", 404, trans('user.response.notfound'));
+            return $this->helper->createResponse("", 404, trans('user.response.notfound'));
 
         }
-
 
     }
 
     /**
      * @param $id
      * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
     public function editPassword($id, Request $request) {
 
-        $password = $request->get('password');
-        $newPassword = $request->get('new_password');
+        if($request->ajax()) {
 
-        $user = User::findOrFail($id);
-        $bcrypHasher = new BcryptHasher();
+            $password = $request->get('data')['password'];
+            $newPassword = $request->get('data')['new_password'];
 
-        $passwordValidated = Validator::make($request->all(), [
-            'password' => 'required'
-        ]);
+            $user = User::findOrFail($id);
+            $bcrypHasher = new BcryptHasher();
 
-        /** @var \Illuminate\Validation\Validator $passwordValidated */
-        if(!$passwordValidated->fails()) {
+            $passwordValidated = Validator::make($request->all(), [
+                'password' => 'required'
+            ]);
 
-            $validation = $bcrypHasher->check($password, $user->password);
-            if ($validation) {
+            /** @var \Illuminate\Validation\Validator $passwordValidated */
+            if($passwordValidated->passes()) {
 
-                $newPasswordValidated = Validator::make($request->all(), [
-                    'new_password' => 'required|different:password|confirmed',
-                    'new_password_confirmation' => 'required'
-                ]);
+                if ($bcrypHasher->check($password, $user->password)) {
 
-                /** @var \Illuminate\Validation\Validator $newPasswordValidated */
-                if ($newPasswordValidated->fails()) {
-                    return $this->createResponse("", 422, "fail");
+                    $newPasswordValidated = Validator::make($request->all(), [
+                        'new_password' => 'required|different:password'
+                    ]);
+
+                    /** @var \Illuminate\Validation\Validator $newPasswordValidated */
+                    if ($newPasswordValidated->passes()) {
+                        return $this->helper->createResponse($this->userRepository->editUserPassword($newPassword,$user), 200, trans('user.edit.success', [], 'user'));
+                    }
+
                 } else {
-                    $user->password = $bcrypHasher->make($newPassword);
-                    $user->save();
-
-                    return $this->createResponse($user, 200, trans('user.edit.success'));
+                    return $this->helper->createResponse("", 422, trans('user.response.error', [], 'user'));
                 }
-            } else {
-                return $this->createResponse("", 422, trans('user.response.error'));
 
             }
-        }else {
-            return $this->createResponse("", 422, trans('user.response.error'));
         }
 
     }
