@@ -106,7 +106,7 @@ class SubscriptionController extends Controller
 		    			<tr>
 		    				<td>'.$offer->title.'</td>
 		    				<td>'.$offer->database_limit.'</td>
-		    				<td>'.$offer->price.'</td>
+		    				<td>'.$offer->price.'€</td>
 		    			</tr>
 		    		</table>
 		    	</body>
