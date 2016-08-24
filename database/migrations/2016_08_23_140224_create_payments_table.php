@@ -18,6 +18,8 @@ class CreatePaymentsTable extends Migration
             $table->integer('order_id')->unsigned();
             $table->string('billingType', 100);
             $table->float('amount');
+            $table->float('cardNumber');
+            $table->string('expirationDate', 5);
             $table->dateTime('created_at');
         });
 

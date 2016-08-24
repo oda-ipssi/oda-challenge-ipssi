@@ -23,6 +23,8 @@ class PaymentsTableSeeder extends Seeder
                 'user_id' => $faker->randomElement($users_id)->id,
                 'billingType' => 'Credit card',
                 'amount' => $faker->randomFloat($nbMaxDecimals = 2, $min = 20, $max = 150),
+                'cardNumber' => $faker->creditCardNumber(),
+                'expirationDate' => $faker->creditCardExpirationDateString() ,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ]);
         }
