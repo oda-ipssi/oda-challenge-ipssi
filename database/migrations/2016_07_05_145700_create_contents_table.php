@@ -14,7 +14,7 @@ class CreateContentsTable extends Migration {
 	{
 		Schema::create('contents', function(Blueprint $table)
 		{
-			$table->integer('id', true);
+			$table->integer('id',true);
 			$table->string('title', 45)->nullable();
 			$table->text('content', 65535)->nullable();
 			$table->string('url', 45)->nullable();
