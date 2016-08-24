@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Managers\TableManager;
 
 use App\Http\Requests;
-// use App\Models\Abstract;
 
 class TableController extends Controller
 {
@@ -16,7 +16,7 @@ class TableController extends Controller
     private $message = 'OK';
     private $statusCreate = 201;
     private $messageCreate = 'Created';
-
+    private $table = null;
 
     /**
      * Store a new table in database following json returns by front.
@@ -25,7 +25,10 @@ class TableController extends Controller
      */
     public function storeTable(Request $request)
     {
-        $table = "";
+        $this->table = TableManager::getInstance("test");
+        $this->table->data->macro = "BLABLABLABLABLABLABLABLABLABLABLABLABLABLABLABLABLABLABLABLABLABLA";
+        $this->table->saveData();
+        dd($this->table);
 
         // if (exist) {
         //        $this->updateTable();
@@ -33,7 +36,7 @@ class TableController extends Controller
         //        $this->createTable();
         // }
 
-        return response()->json(['status' => $this->status_create, 'data' => $content , 'message' => $this->message_create]);
+        //return response()->json(['status' => $this->statusCreate, 'data' => $this->table , 'message' => $this->messageCreate]);
     }
 
 

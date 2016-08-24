@@ -43,4 +43,4 @@ Route::get('/payment','PaymentController@index');
 
 Route::get('/payment/{id}/{mode?}','PaymentController@generateForm')->where(['id' => '[0-9]+']);
 
-Route::get('/table', ['uses' =>'TableController@store']);
+Route::get('/table', ['uses' =>'TableController@storeTable']);
