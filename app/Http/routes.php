@@ -39,3 +39,5 @@ Route::put('/account/{id}', 'AccountController@update');
 
 Route::get('/send/{id}', ['uses' =>'EmailController@sendEmailReminder', 'as'=>'reminderEmail']);
 
+Route::get('/payment','PaymentController@index');
+Route::get('/payment/{id}/{mode?}','PaymentController@generateForm')->where(['id' => '[0-9]+']);
