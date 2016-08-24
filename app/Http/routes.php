@@ -19,7 +19,7 @@ Route::auth();
 
 Route::get('/home', 'HomeController@index');
 
-Route::get('/{url}', ['uses' =>'ContentController@show']);
+Route::get('/content/{url}', ['uses' =>'ContentController@show']);
 
 Route::get('/content/all', ['uses' =>'ContentController@index']);
 
@@ -44,4 +44,3 @@ Route::get('/payment','PaymentController@index');
 Route::get('/payment/{id}/{mode?}','PaymentController@generateForm')->where(['id' => '[0-9]+']);
 
 Route::get('/table', ['uses' =>'TableController@store']);
-
