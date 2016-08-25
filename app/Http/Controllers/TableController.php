@@ -26,7 +26,6 @@ class TableController extends Controller
     public function storeTable(Request $request)
     {
         $this->table = TableManager::getInstance("test");
-        $this->table->data->macro = "BLABLABLABLABLABLABLABLABLABLABLABLABLABLABLABLABLABLABLABLABLABLA";
         $this->table->saveData();
         dd($this->table);
 
