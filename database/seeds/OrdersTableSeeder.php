@@ -20,7 +20,8 @@ class OrdersTableSeeder extends Seeder
                 'vat' => 20,
                 'status' => 'OK',
                 'user_id' => $user_id->user_id,
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'price' => '20.0'
             ]);
         }
     }
