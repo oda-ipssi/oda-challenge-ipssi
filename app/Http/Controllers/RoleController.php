@@ -24,8 +24,8 @@ class RoleController extends Controller
     public function index(RoleRepository $roleManager)
     {
         return response()->json([
-            'roles' => $roleManager->indexRoles(),
-            'users' => $roleManager->indexUsers(),
+            'registered' => $roleManager->indexRegistered(),
+            'undercustomer' => $roleManager->indexCustomer(),
         ]);
     }
 
@@ -35,7 +35,7 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(RoleRequest $request, RoleRepository $roleManager)
+    public function store(Request $request, RoleRepository $roleManager)
     {
         $roleManager->store($request->all());
     }
@@ -50,6 +50,7 @@ class RoleController extends Controller
     public function update(RoleRequest $request, $id)
     {
         $this->RoleRepository->update($request->all(), $id);
+
     }
 
     /**

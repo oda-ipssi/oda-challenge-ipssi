@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('city', 45);
             $table->string('phone', 45);
             $table->string('ip',15);
+            $table->integer('id_customer')->nullable()->default(null);
             $table->boolean('is_prospect');
             $table->rememberToken();
             $table->timestamps();

@@ -28,27 +28,28 @@ Route::get('test/scan', 'TestController@scanPermissions');
 // $this->post('password/email', 'Auth\PasswordController@sendResetLinkEmail');
 // $this->post('password/reset', 'Auth\PasswordController@reset');
 
-Route::auth(); // Contient l'ensemble des routes ci-dessus
 
-// Gestion des rôles
-Route::resource('role', 'RoleController', ['except' => [
-    'show', 'create', 'edit'
-]]);
 
-// Gestion des permissions
-Route::resource('permission', 'PermissionController', ['except' => [
-    'show', 'create', 'edit'
-]]);
+
+Route::get('/home', 'HomeController@index');
 
 // ----------------------------------------------------------------------------------------------------
 // ROUTES AVEC AUTHENTIFICATION
-
 // Ex: admin/role, admin/permission, etc.
-
-Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
-
+Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin'], function() {
 
 });
+
+
+Route::group(['middleware' => ['auth', 'customer'], 'prefix' => 'customer'], function() {
+
+    // Gestion des rôles
+    Route::resource('role', 'RoleController', ['except' => [
+        'show', 'create', 'edit'
+    ]]);
+
+});
+
 
 /*
 |--------------------------------------------------------------------------
@@ -68,7 +69,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
 
 Route::auth();
 
-Route::get('/home', 'HomeController@index');
 
 Route::put('/account/{id}/password', 'AccountController@editPassword');
 Route::get('/account/{id}', 'AccountController@show');

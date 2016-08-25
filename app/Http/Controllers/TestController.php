@@ -10,7 +10,7 @@ use Illuminate\Routing\Route;
 class TestController extends Controller
 {
     public function index() {
-
+        return "ok";
     }
 
     /**
