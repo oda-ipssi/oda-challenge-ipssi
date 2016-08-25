@@ -67,6 +67,7 @@ class AccountController extends Controller
 
         try{
 
+
             $accountUser = $this->userRepository->editUserInformation($userRequest->get('data'), User::findOrFail($id));
 
             return $this->helper->createResponse($accountUser, 200, trans('user.edit.success'));
