@@ -11,6 +11,21 @@
     * `php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"`
 - **7** then run in terminal:
     * `php artisan serve` and go to http://localhost:8000/
+- **8** To install the database and everything to get the last version of the projet
+    * POSTGRES install :
+      *  sudo apt-get update
+      *  sudo apt-get install postgresql
+      *  sudo apt-get install phppgadmin
+
+      *  sudo su postgres
+      *  psql
+
+      *  CREATE USER asYouWish WITH PASSWORD 'asYouWish';
+      * ALTER USER asYouWish WITH SUPERUSER;
+    * `php artisan migrate:install`
+    * `php artisan migrate`
+    * `php artisan db:seed`
+    
 *If everything is ok you'll see LARAVEL 5 title main page*
 
 
