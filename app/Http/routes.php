@@ -93,7 +93,7 @@ Route::put('/account/{id}/password', 'AccountController@editPassword')->where(['
 
 Route::get('/account/{id}', 'AccountController@show')->where(['id' => '[0-9]+']);
 
-Route::put('/account/{id}', 'AccountController@update')->where(['id' => '[0-9]+']);
+Route::post('/account/{id}', 'AccountController@update')->where(['id' => '[0-9]+']);
 
 /* Route to register a user */
 Route::post('/registration', ['uses' => 'UsersController@createUser']);
