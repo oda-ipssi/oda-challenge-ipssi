@@ -75,9 +75,9 @@ Route::get('/', function () {
 Route::auth();
 
 
-Route::get('/content/{url}', ['uses' =>'ContentController@show']);
-
 Route::get('/content/all', ['uses' =>'ContentController@index']);
+
+Route::get('/content/{url}', ['uses' =>'ContentController@show']);
 
 Route::post('/content/store', ['uses' =>'ContentController@store']);
 

@@ -17,7 +17,7 @@ class UsersTableSeeder extends Seeder
         User::create([
             'username' => 'admin',
             'email' =>  'admin@example.net',
-            'password' => bcrypt('oda'),
+            'password' => password_hash('oda',PASSWORD_BCRYPT),
             'firstname' => 'admin',
             'lastname' => 'testAdmin',
             'address' => 'Rue Admin',
@@ -32,7 +32,7 @@ class UsersTableSeeder extends Seeder
         User::create([
             'username' => 'customer',
             'email' =>  'customer@example.net',
-            'password' => bcrypt('oda'),
+            'password' => password_hash('oda',PASSWORD_BCRYPT),
             'firstname' => 'customer',
             'lastname' => 'testCustomer',
             'address' => 'Rue Customer',
@@ -47,7 +47,7 @@ class UsersTableSeeder extends Seeder
         User::create([
             'username' => 'undercustomer',
             'email' =>  'undercustomer@example.net',
-            'password' => bcrypt('oda'),
+            'password' => password_hash('oda',PASSWORD_BCRYPT),
             'firstname' => 'undercustomer',
             'lastname' => 'testUndercustomer',
             'address' => 'Rue Undercustomer',
@@ -63,7 +63,7 @@ class UsersTableSeeder extends Seeder
         User::create([
             'username' => 'undercustomer2',
             'email' =>  'undercustomer2@example.net',
-            'password' => bcrypt('oda'),
+            'password' => password_hash('oda',PASSWORD_BCRYPT),
             'firstname' => 'undercustomer2',
             'lastname' => 'testUndercustomer2',
             'address' => 'Rue Undercustomer2',
@@ -79,7 +79,7 @@ class UsersTableSeeder extends Seeder
         User::create([
             'username' => 'registered',
             'email' =>  'registered@example.net',
-            'password' => bcrypt('oda'),
+            'password' => password_hash('oda',PASSWORD_BCRYPT),
             'firstname' => 'registered',
             'lastname' => 'testRegistered',
             'address' => 'Rue Registered',
