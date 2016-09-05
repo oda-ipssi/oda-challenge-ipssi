@@ -71,11 +71,11 @@ class AssociateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(AssociateRequest $request, $id)
-    {
-        $this->AssociateRepository->update($request->all(), $id);
-
-    }
+    // public function update(AssociateRequest $request, $id)
+    // {
+    //     $this->AssociateRepository->update($request->all(), $id);
+    //
+    // }
 
     /**
      * Remove the specified resource from storage.
