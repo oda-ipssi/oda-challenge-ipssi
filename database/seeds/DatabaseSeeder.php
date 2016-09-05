@@ -16,11 +16,11 @@ class DatabaseSeeder extends Seeder
 
         $this->call(UsersTableSeeder::class);
         $this->call(RolesPermissionsTableSeeder::class);
-        // $this->call(OffersTableSeeder::class);
-        // $this->call(ContentsTableSeeder::class);
-        // $this->call(DatasTableSeeder::class);
-        // $this->call(OrdersTableSeeder::class);
-        // $this->call(OrdersOffersTableSeeder::class);
+        $this->call(OffersTableSeeder::class);
+        $this->call(ContentsTableSeeder::class);
+        $this->call(DatasTableSeeder::class);
+        $this->call(OrdersTableSeeder::class);
+        $this->call(OrdersOffersTableSeeder::class);
 
         Model::reguard();
     }

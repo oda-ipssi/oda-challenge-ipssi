@@ -13,9 +13,6 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-
-        DB::table('users')->delete();
-
         // ----- ADMIN -----
         User::create([
             'username' => 'admin',
@@ -29,6 +26,7 @@ class UsersTableSeeder extends Seeder
             'phone' => '0102030405',
             'ip' => '87842564',
             'is_prospect' => 0,
+            'is_active' => 1,
         ]);
         // ----- CUSTOMER -----
         User::create([
@@ -43,6 +41,7 @@ class UsersTableSeeder extends Seeder
             'phone' => '0102030405',
             'ip' => '87842564',
             'is_prospect' => 0,
+            'is_active' => 1,
         ]);
         // ----- UNDERCUSTOMER -----
         User::create([
@@ -58,6 +57,7 @@ class UsersTableSeeder extends Seeder
             'ip' => '87842564',
             'is_prospect' => 0,
             'id_customer' => 2,
+            'is_active' => 1,
         ]);
         // ----- UNDERCUSTOMER -----
         User::create([
@@ -73,6 +73,7 @@ class UsersTableSeeder extends Seeder
             'ip' => '87842564',
             'is_prospect' => 0,
             'id_customer' => 2,
+            'is_active' => 1,
         ]);
         // ----- REGISTERED -----
         User::create([
@@ -87,8 +88,9 @@ class UsersTableSeeder extends Seeder
             'phone' => '0102030405',
             'ip' => '87842564',
             'is_prospect' => 1,
+            'is_active' => 0,
         ]);
 
-       factory(App\Models\User::class, 10)->create();
+//       factory(App\Models\User::class, 10)->create();
     }
 }
