@@ -74,6 +74,8 @@ Route::get('/', function () {
 
 Route::auth();
 
+// Gestion des rôles
+Route::resource('associate', 'AssociateController', ['except' => ['show', 'create', 'edit']]);
 
 Route::get('/content/{url}', ['uses' =>'ContentController@show']);
 
