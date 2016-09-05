@@ -86,39 +86,40 @@ class AccountController extends Controller
      */
     public function editPassword($id, Request $request) {
 
-        if($request->ajax()) {
+        $password = $request->get('data')['password'];
+        $newPassword = $request->get('data')['new_password'];
 
-            $password = $request->get('data')['password'];
-            $newPassword = $request->get('data')['new_password'];
 
-            $user = User::findOrFail($id);
-            $bcrypHasher = new BcryptHasher();
 
-            $passwordValidated = Validator::make($request->all(), [
-                'password' => 'required'
-            ]);
+        $user = User::findOrFail($id);
 
-            /** @var \Illuminate\Validation\Validator $passwordValidated */
-            if($passwordValidated->passes()) {
+        $bcryptHasher = new BcryptHasher();
 
-                if ($bcrypHasher->check($password, $user->password)) {
+        $passwordValidated = Validator::make($request->all(), [
+            'data.password' => 'required'
+        ]);
 
-                    $newPasswordValidated = Validator::make($request->all(), [
-                        'new_password' => 'required|different:password'
-                    ]);
+        /** @var \Illuminate\Validation\Validator $passwordValidated */
+        if($passwordValidated->passes()) {
 
-                    /** @var \Illuminate\Validation\Validator $newPasswordValidated */
-                    if ($newPasswordValidated->passes()) {
-                        return $this->helper->createResponse($this->userRepository->editUserPassword($newPassword,$user), 200, trans('user.edit.success', [], 'user'));
-                    }
-
-                } else {
-                    return $this->helper->createResponse("", 422, trans('user.response.error', [], 'user'));
+            if ($bcryptHasher->check($password, $user->password)) {
+                $newPasswordValidated = Validator::make($request->all(), [
+                    'data.new_password' => 'required|different:data.password'
+                ]);
+                /** @var \Illuminate\Validation\Validator $newPasswordValidated */
+                if ($newPasswordValidated->passes()) {
+                    $user = $this->userRepository->editUserPassword($newPassword,$user);
+                    $user->save();
+                    return $this->helper->createResponse($user, 200, trans('user.edit.success', [], 'user'));
                 }
 
+            } else {
+                return $this->helper->createResponse("Password not the same", 422, trans('user.response.error', [], 'user'));
             }
-        }
 
+        } else {
+            return $this->helper->createResponse("", 422, trans('user.response.error', [], 'user'));
+        }
     }
 
 }
