@@ -13,7 +13,7 @@ class TableManager
     * Declaring useful parameters used in the class
     */
     public  $data;
-    private $userID;
+    private $userId;
     private $tableName;
 
     /*Declaring the class' methods*/
@@ -39,13 +39,14 @@ class TableManager
     private function loadData()
     {
         /*Method to load data*/
-        $this->data = json_decode(file_get_contents("https://api.myjson.com/bins/4e33n"));
+
+        $this->data = json_decode(file_get_contents("https://api.myjson.com/bins/10dyk"));
     }
 
     public function saveData()
     {
         /*Method to save data*/
         //dd(public_path()."/".$this->tableName.".json");
-        file_put_contents(public_path()."/".$this->tableName.".json", json_encode($this->data));
+        file_put_contents(database_path()."/jables/".$this->tableName.".json", json_encode($this->data));
     }
 }

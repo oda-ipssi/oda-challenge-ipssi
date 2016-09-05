@@ -161,6 +161,7 @@ return [
          */
         Barryvdh\Debugbar\ServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
+        hedronium\Jables\JablesServiceProvider::class,
 
     ],
 

@@ -71,7 +71,7 @@ return [
             'host' => env('DB_HOST', 'localhost'),
             'port' => env('DB_PORT', '5432'),
             'database' => env('DB_DATABASE', 'oda'),
-            'username' => env('DB_USERNAME', 'admin'),
+            'username' => env('DB_USERNAME', 'ju'),
             'password' => env('DB_PASSWORD', '0000'),
             'charset' => 'utf8',
             'prefix' => '',
