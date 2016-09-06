@@ -16,6 +16,9 @@ class CreateOffersTable extends Migration
             $table->integer('id',true);
             $table->string('title', 45)->nullable();
             $table->text('description')->nullable();
+            $table->boolean('has_support');
+            $table->boolean('has_update');
+            $table->integer('user_limit')->nullable();
             $table->integer('database_limit')->nullable();
             $table->float('price', 10, 0)->nullable();
         });
