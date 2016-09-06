@@ -10,7 +10,7 @@
  */
 
 header('Access-Control-Allow-Origin: http://localhost:9000');
-header('Access-Control-Allow-Methods: GET, POST, PUT' );
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE' );
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-Token, Origin, Authorization');
 
@@ -101,20 +101,43 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
 
         /**
-         * -----------------------------------------------------
-         * Registration
-         * -----------------------------------------------------
-         */
+        * -----------------------------------------------------
+        * Registration
+        * -----------------------------------------------------
+        */
 
         Route::post('/registration', ['uses' => 'UsersController@createUser']);
 
 
         /**
+        * -----------------------------------------------------
+        * Account
+        * -----------------------------------------------------
+        */
+
+        Route::put('/account/{id}/password', 'AccountController@editPassword')->where(['id' => '[0-9]+']);
+
+        Route::get('/account/{id}', 'AccountController@show')->where(['id' => '[0-9]+']);
+
+        Route::put('/account/{id}', 'AccountController@update')->where(['id' => '[0-9]+']);
+
+
+        /**
+        * -----------------------------------------------------
+        * Account validation
+        * -----------------------------------------------------
+        */
+
+        Route::post('/validation/{token}', ['uses' => 'UsersController@validateUserAccount', 'as' => 'userValidation']);
+
+        Route::get('/send/{id}', ['uses' =>'EmailController@sendEmailReminder', 'as'=>'reminderEmail']);
+
+
+        /**
          * -----------------------------------------------------
-         * Validation
+         * Subscription
          * -----------------------------------------------------
          */
-
         Route::get('/subscription', 'SubscriptionController@getAllOrders');
 
         Route::get('/subscription/{id}', 'SubscriptionController@index')->where(['id' => '[0-9]+']);
@@ -129,14 +152,6 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
         Route::get('/downloadInvoice/{id}', 'SubscriptionController@downloadInvoice')->where(['id' => '[0-9]+']);
 
-        Route::get('/payment','PaymentController@index');
-
-        Route::get('/payment/{id}/{mode?}','PaymentController@generateForm')->where(['id' => '[0-9]+']);
-
-        Route::post('/validation/{token}', ['uses' => 'UsersController@validateUserAccount', 'as' => 'userValidation']);
-
-        Route::get('/send/{id}', ['uses' =>'EmailController@sendEmailReminder', 'as'=>'reminderEmail']);
-
 
         /**
          * -----------------------------------------------------
@@ -149,23 +164,23 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
         Route::get('/payment/{id}/{mode?}','PaymentController@generateForm')->where(['id' => '[0-9]+']);
 
 
-});
+        /**
+         * -----------------------------------------------------
+         * Offers
+         * -----------------------------------------------------
+         */
 
-// BULLSHIT COMMENTED TO DELETE ? :-)
-//--------------------------------------
+        Route::put('/offers/{id}', 'OfferController@update')->where(['id' => '[0-9]+']);
 
-// // Authentication Routes...
-// $this->get('login', 'Auth\AuthController@showLoginForm');
-// $this->post('login', 'Auth\AuthController@login');
-// $this->get('logout', 'Auth\AuthController@logout');
-//
-// // Registration Routes...
-// $this->get('register', 'Auth\AuthController@showRegistrationForm');
-// $this->post('register', 'Auth\AuthController@register');
-//
-// // Password Reset Routes...
-// $this->get('password/reset/{token?}', 'Auth\PasswordController@showResetForm');
-// $this->post('password/email', 'Auth\PasswordController@sendResetLinkEmail');
-// $this->post('password/reset', 'Auth\
+        Route::post('/offers', 'OfferController@create');
+
+        Route::get('/offers','OfferController@getAllOffers');
+
+        Route::delete('/offers/{id}','OfferController@delete')->where(['id' => '[0-9]+']);
+
+
+
+    });
+
 
 

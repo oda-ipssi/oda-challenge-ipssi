@@ -92,8 +92,6 @@ class AccountController extends Controller
         $password = $request->get('data')['password'];
         $newPassword = $request->get('data')['new_password'];
 
-
-
         $user = User::findOrFail($id);
 
         $bcryptHasher = new BcryptHasher();
