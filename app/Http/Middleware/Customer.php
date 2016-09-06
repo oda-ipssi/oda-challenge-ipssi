@@ -2,7 +2,6 @@
 
 use Closure;
 use Entrust;
-use Auth;
 use App;
 
 class Customer {
@@ -16,7 +15,7 @@ class Customer {
     */
     public function handle($request, Closure $next)
     {
-        if (!Entrust::hasRole('role_customer') && Auth::check()) {
+        if (!Entrust::hasRole('role_customer')) {
             return response()->json(trans('messages.forbidden'));
         }
         return $next($request);

@@ -82,8 +82,8 @@ Route::post('/test/jables', ['middleware' => 'cors', function(Request $request)
 
         Route::group(['middleware' => ['customer'], 'prefix' => 'customer'], function() {
 
-                // Gestion des rôles
-                Route::resource('role', 'RoleController', ['except' => [
+                // Gestion des associate
+                Route::resource('associate', 'AssociateController', ['except' => [
                     'show', 'create', 'edit'
                 ]]);
 
@@ -215,5 +215,3 @@ Route::post('/test/jables', ['middleware' => 'cors', function(Request $request)
 // $this->get('password/reset/{token?}', 'Auth\PasswordController@showResetForm');
 // $this->post('password/email', 'Auth\PasswordController@sendResetLinkEmail');
 // $this->post('password/reset', 'Auth\
-
-
