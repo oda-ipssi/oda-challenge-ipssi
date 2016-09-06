@@ -76,14 +76,15 @@ class TableController extends Controller
 
     public function testTable(Request $request)
     {
-        dd($request);
-        $dataArray = json_decode($request->data);
+        $dataArray = json_decode($request->getContent());
+
+        $data = json_encode($dataArray);
 
         if (!$dataArray) {
             return response()->json(['status' => '402', 'message' => "Je suis ton PERE"]);
         }
 
-        return response()->json(['status' => $this->status_create, 'data' => $dataArray , 'message' => $this->message_create]);
+        return response()->json(['status' => $this->status_create, 'data' => $data , 'message' => $this->message_create]);
     }
 
 }
