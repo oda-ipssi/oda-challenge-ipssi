@@ -23,16 +23,15 @@ class UserRequest extends Request
      */
     public function rules()
     {
-        //dd($this->request->get('data'));
         return [
-            '*.email' => 'required|unique:users,email',
-            '*.username' => 'required|max:45',
-            '*.firstname' => 'required|max:45',
-            '*.lastname' => 'required|max:45',
-            '*.address' => 'max:255',
-            '*.zipcode' => 'max:45',
-            '*.city' => 'max:45',
-            '*.phone' => 'max:45',
+            'data.email' => 'required',
+            'data.username' => 'required|max:45',
+            'data.firstname' => 'required|max:45',
+            'data.lastname' => 'required|max:45',
+            'data.address' => 'max:255',
+            'data.zipcode' => 'max:45',
+            'data.city' => 'max:45',
+            'data.phone' => 'max:45',
         ];
     }
 
@@ -40,7 +39,6 @@ class UserRequest extends Request
     {
         return [
             'email.required' => trans('user.data_validator.email.required', [], 'user'),
-            'email.unique' => trans('user.data_validator.email.unique', [], 'user'),
             'username.required' => trans('user.data_validator.username.required', [], 'user'),
             'username.max' => trans('user.data_validator.username.max', [], 'user'),
             'firstname.required' => trans('user.data_validator.firstname.required', [], 'user'),

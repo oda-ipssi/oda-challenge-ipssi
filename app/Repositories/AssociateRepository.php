@@ -98,15 +98,18 @@ class AssociateRepository extends BaseRepository
 		}
 
 
-    public function update($inputs, $id)
-    {
-        Associate::where('id', $id)->update($inputs);
-    }
+    // public function update($inputs, $id)
+    // {
+    //     Associate::where('id', $id)->update($inputs);
+    // }
 
     public function destroy($id)
-	{
-        $role = Associate::findOrFail($id);
+  	{
+        $userModel = User::find($id);
+        $userModel->detachRoles($userModel->roles);
+
+        $role = User::findOrFail($id);
         $role->delete();
-	}
+  	}
 
 }
