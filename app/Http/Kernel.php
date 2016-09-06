@@ -55,5 +55,6 @@ class Kernel extends HttpKernel
         'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
         'admin' => \App\Http\Middleware\Admin::class,
         'customer' => \App\Http\Middleware\Customer::class,
+        'cors' => \App\Http\Middleware\Cors::class, // <<< add this line
     ];
 }
