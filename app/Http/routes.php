@@ -27,16 +27,16 @@ header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-To
  * ----------------------------------------------------------------------------------------------------
  */
 
-    /**
-     * -----------------------------------------------------
-     * Sign in
-     * -----------------------------------------------------
-     */
+        /**
+         * -----------------------------------------------------
+         * Sign in
+         * -----------------------------------------------------
+         */
 
-    Route::post('/sign-in', 'AuthenticateController@authenticate');
+        Route::post('/sign-in', 'AuthenticateController@authenticate');
 
 
-    Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
+        Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
 
         /**
@@ -115,6 +115,19 @@ header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-To
          * -----------------------------------------------------
          */
 
+
+        Route::resource('subscription', 'SubscriptionController');
+
+        Route::get('/stopSubscription/{id}', ['uses' =>'SubscriptionController@stopSubscription']);
+
+        Route::get('/renewSubscription/{id}', ['uses' =>'SubscriptionController@renewSubscription']);
+
+        Route::get('/downloadInvoice/{id}', ['uses' =>'SubscriptionController@downloadInvoice']);
+
+        Route::get('/payment','PaymentController@index');
+
+        Route::get('/payment/{id}/{mode?}','PaymentController@generateForm')->where(['id' => '[0-9]+']);
+
         Route::post('/validation/{token}', ['uses' => 'UsersController@validateUserAccount', 'as' => 'userValidation']);
 
         Route::get('/send/{id}', ['uses' =>'EmailController@sendEmailReminder', 'as'=>'reminderEmail']);
@@ -149,4 +162,5 @@ header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-To
 // $this->get('password/reset/{token?}', 'Auth\PasswordController@showResetForm');
 // $this->post('password/email', 'Auth\PasswordController@sendResetLinkEmail');
 // $this->post('password/reset', 'Auth\
+
 
