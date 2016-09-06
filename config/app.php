@@ -161,9 +161,10 @@ return [
          */
         Barryvdh\Debugbar\ServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
+        hedronium\Jables\JablesServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
-        Barryvdh\Cors\ServiceProvider::class
+        Barryvdh\Cors\ServiceProvider::class,
 
     ],
 
