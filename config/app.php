@@ -165,7 +165,6 @@ return [
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class
 
-
     ],
 
     /*
@@ -216,7 +215,6 @@ return [
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
         'Cors' => Barryvdh\Cors\ServiceProvider::class,
-
 
     ],
 
