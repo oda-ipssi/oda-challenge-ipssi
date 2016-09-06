@@ -10,7 +10,7 @@
  */
 
 header('Access-Control-Allow-Origin: http://localhost:9000');
-header('Access-Control-Allow-Methods: GET, POST, PUT' );
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE' );
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-Token, Origin, Authorization');
 
@@ -166,10 +166,14 @@ header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-To
          * -----------------------------------------------------
          */
 
+        Route::put('/offers/{id}', 'OfferController@update')->where(['id' => '[0-9]+']);
+
+        Route::post('/offers', 'OfferController@create');
+
         Route::get('/offers','OfferController@getAllOffers');
-        Route::post('/offers','OfferController@create');
-        Route::put('/offers/{id}','OfferController@update')->where(['id' => '[0-9]+']);
+
         Route::delete('/offers/{id}','OfferController@delete')->where(['id' => '[0-9]+']);
+
 
 
     });

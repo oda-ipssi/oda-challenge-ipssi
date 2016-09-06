@@ -51,9 +51,10 @@ class OfferController extends Controller
      */
     public function update($id, OfferRequest $offerRequest) {
 
+
         try{
 
-            $offer = $this->offerRepository->edit($offerRequest->get('data'), Offer::findOrFail($id));
+            $offer = $this->offerRepository->editOffer($offerRequest->get('data'), Offer::findOrFail($id));
 
             $offer->save();
 
