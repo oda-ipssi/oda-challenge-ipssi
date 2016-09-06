@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Offer;
-use App\Models\OrdersOffer;
 use App\Models\Payment;
+use Carbon\Carbon;
 use Session;
 use DB;
 use PDF;
@@ -15,100 +15,120 @@ use App;
 class SubscriptionController extends Controller
 {
     private $status = 200;
-    private $message = 'OK';
+    private $message = ['OK'];
 
 
-    public function response($data == null, $status, $message){
+    /**
+     * Return all the commands for one users
+     * @param $userId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index($userId){
+        $order = Order::where('user_id', $userId)->orderBy('created_at', 'desc')->get();
 
-        return response()->json(['data' => $data, 'status' => $status, 'message' => $message]);
-    }
-	/**
-	* Show subscription's status
-	* @param int $userId
-	*
-	*/
-    public function show($userId) {
-
-    	$user = User::find($userId);
-    	$order = Order::where('user_id', $userId)->orderBy('created_at', 'desc')->first();
-    	$offerValue = OrdersOffer::where('order_id', $order->id)->value('offer_id');
-    	$offer = Offer::find($offerValue);
-        if(!$offer){
-            $this->status = 404;
-            $this->message = 'Not found';
+        if(!$order){
+            return  response()->json('',  404, 'Not found');
+        } else {
+            return  response()->json(['order' => $order],  $this->status, $this->message);
         }
+    }
 
-    	return  $this->response([ 'user' => $user, 'order' => $order, 'offer' => $offer ],  $this->status, $this->message);
+    // show one command with possibillity to download the invoice
+    // create one subscription
+    // delete one subscription
+    // upgrade offer
+
+    /**
+     * @param $userId
+     * @param $offerId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function createSubscription($userId,$offerId){
+        $order = new Order();
+        //if pay
+        //get value return
+        $order->vat = 20;
+        $order->status = 'OK';
+        $order->user_id = $userId;
+        $order->offer_id = $offerId;
+        $order->created_at = Carbon::now()->format('Y-m-d H:i:s');
+        $order->updated_at = Carbon::now()->format('Y-m-d H:i:s');
+        $order->price = 20;
+
+        $order->save();
+
+        //activate user
+        $user = User::find($userId);
+
+        $user->is_active = 1;
+
+        $user->save();
+
+        return  response()->json(['order' => $order, 'user' => $user],  $this->status, 'Order created');
+
     }
 
     /**
-    * Terminate subscription
-    * @param int $orderId
-    *
-    */
+     * @param $orderId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteSubscription($orderId){
+        $order = Order::find($orderId);
+
+        $order->delete();
+
+        return  response()->json('',  $this->status,'Order deleted');
+
+    }
+
+    /**
+     * @param $orderId
+     * @param $offerId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function changeSubscription($orderId,$offerId){
+        $order = Order::find($orderId);
+
+        //if(pay)
+        if($order->offer_id != $offerId){
+            $order->offer_id = $offerId;
+        }
+
+        $order->save();
+
+        return  response()->json(['order' => $order],  $this->status, 'Order created');
+
+    }
+
+    /**
+     * @param $orderId
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function stopSubscription($orderId) {
 
         $order = Order::find($orderId);
-    	
-        if(!$order) {
-            $this->status = 404;
-            $this->message = 'Not found';
-        } else {
-            $order->status = 'Stopped';
-            $order->save();
-            Session::flash('message', 'Successfully stopped subscription!');
-            $this->status = 200;
-            $this->message = 'Request completed';
-        }
 
-        return  $this->response(null,  $this->status, $this->message);
+        $order->status = 'STOP';
+        $order->save();
+
+        return  response()->json(['order' => $order],  200, 'order stopped');
     }
 
-    /**
-    * Subscription renewal
-    * @param int $orderId
-    *
-    */
-    public function renewSubscription($orderId) {
+    public function downloadInvoice($order_id) {
 
-    	$order = Order::find($orderId);
+        $payment = Payment::where('order_id',$order_id)->first();
+        $user = User::find($payment->user_id);
+        $order = Order::find($order_id);
+        $offer = Offer::find($order->offer_id);
 
-        if(!$order) {
-            $this->status = 404;
-            $this->message = 'Not found';
-        } else {
-            $order->status = 'Renew';
-            $order->save();
-            Session::flash('message', 'Successfully renewed subscription!');
-            $this->status = 200;
-            $this->message = 'Request completed';
-        }
-
-    	return  $this->response(null,  $this->status, $this->message);
-
-    }
-
-    /**
-    * Download invoice
-    * @param
-    *
-    */
-    public function downloadInvoice($id) {
-    	
-    	$payment = Payment::find($id);
-    	$user = User::find($payment->user_id);
-    	$order = Order::find($payment->order_id);
-    	$offerValue = OrdersOffer::where('order_id', $order->id)->value('offer_id');
-    	$offer = Offer::find($offerValue);
-    	
-    	$html = '
+        $html = '
     		<html>
     			<head>
     				<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     			</head>
 
     			<body>
-		    		<center><h1>Invoice #'.$payment->id.'</h1></center>
+		    		<h1>Invoice #'.$payment->id.'</h1>
 		    		<h2>Payment information</h2>
 		    		<p>Payment method : '.$payment->paymentMethod.'</p>
 		    		<p>Card number : '.$payment->cardNumber.'</p>
@@ -138,20 +158,18 @@ class SubscriptionController extends Controller
 		    	</body>
 		    <html>';
 
-    	$pdf = App::make('dompdf.wrapper');
-		$pdf->loadHTML($html)->save('invoice.pdf');
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML($html)->save('invoice.pdf');
+
+        return  response()->json($pdf->stream(), 200, ['Response Ok']);
+
+    }
 
 
-        if(!$payment) {
-            $this->status = 404;
-            $this->message = 'Not found';
-        } else {
-            $this->status = 200;
-            $this->message = 'Request completed';
-        }
+    public function getAllOrders(){
+        $orders = DB::table('orders')->orderBy('created_at', 'desc')->get();
 
-        return  $this->response($pdf->stream(),  $this->status, $this->message);
-
+        return response()->json(['orders' => $orders], 200, ['OK']);
     }
 
 
