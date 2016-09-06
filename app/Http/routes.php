@@ -1,19 +1,5 @@
 <?php
 
-/**
- * ----------------------------------------------------------------------------------------------------
- *
- * HEADER FOR CROSS DOMAINS
- * This below might be useless regardless to Barryvdh\Cors\ handler
- *
- * ----------------------------------------------------------------------------------------------------
- */
-
-header('Access-Control-Allow-Origin: http://localhost:9000');
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE' );
-header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-Token, Origin, Authorization');
-
 
 /**
  * ----------------------------------------------------------------------------------------------------
@@ -138,11 +124,11 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
          * Subscription
          * -----------------------------------------------------
          */
-        Route::get('/subscription', 'SubscriptionController@getAllOrders');
+        Route::get('/subscriptions', 'SubscriptionController@getAllOrders');
 
-        Route::get('/subscription/{id}', 'SubscriptionController@index')->where(['id' => '[0-9]+']);
+        Route::get('/subscription', 'SubscriptionController@getOrder');
 
-        Route::post('/subscription','SubscriptionController@createSubscription');
+        Route::post('/subscription','SubscriptionController@subscriptionFactory');
 
         Route::delete('/subscription/{id}','SubscriptionController@deleteSubscription')->where(['id' => '[0-9]+']);
 
