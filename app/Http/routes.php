@@ -64,7 +64,7 @@ Route::group(['middleware' => ['auth', 'customer'], 'prefix' => 'customer'], fun
 
 /* Allow angular to access the api and return the right json*/
 header('Access-Control-Allow-Origin: http://localhost:9000');
-header('Access-Control-Allow-Methods: GET, POST, PUT' );
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE' );
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-Token, Origin, Authorization');
 
