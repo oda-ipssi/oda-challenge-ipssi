@@ -30,6 +30,7 @@ class TableController extends Controller
     public function storeTable(Request $request)
     {
         // $user = User::where('validation_token', $token)->first(); find the user by right parameter
+        // $user = JWTAuth::parseToken()->authenticate(); // get current user
         $this->table = TableManager::getInstance("food");
         if (Schema::hasTable($this->table->tableName)) {
             // return update in fact
@@ -77,14 +78,14 @@ class TableController extends Controller
     public function testTable(Request $request)
     {
         $dataArray = json_decode($request->getContent());
-
         $data = json_encode($dataArray);
+        var_dump($data);
 
-        if (!$dataArray) {
-            return response()->json(['status' => '402', 'message' => "Je suis ton PERE"]);
-        }
+        //if (!$dataArray) {
+            //return response()->json(['status' => '402', 'message' => "Je suis ton PERE"]);
+        //}
 
-        return response()->json(['status' => $this->status_create, 'data' => $data , 'message' => $this->message_create]);
+        return response()->json(['status' => '200', 'message' => "Je suis ton PERE"]);
     }
 
 }

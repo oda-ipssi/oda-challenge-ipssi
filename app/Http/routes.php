@@ -35,6 +35,15 @@ header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-To
 
     Route::post('/sign-in', 'AuthenticateController@authenticate');
 
+    Route::post('/table/test', ['uses' =>'TableController@testTable'])->middleware('cors');
+
+Route::post('/test/jables', ['middleware' => 'cors', function(Request $request)
+{
+    dump($request);
+    die;
+    return response()->json(['status' => '200', 'message' => "Je suis ton PERE"]);
+}]);
+
 
     Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
@@ -188,7 +197,7 @@ header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-To
      */
     Route::get('/table', ['uses' =>'TableController@storeTable']);
 
-    Route::post('/table/test', ['uses' =>'TableController@testTable']);
+
 
 // BULLSHIT COMMENTED TO DELETE ? :-)
 //--------------------------------------
