@@ -69,6 +69,9 @@ class AccountController extends Controller
 
             $accountUser = $this->userRepository->editUserInformation($userRequest->get('data'), User::findOrFail($id));
 
+            $accountUser->save();
+
+
             return $this->helper->createResponse($accountUser, 200, trans('user.edit.success'));
 
         } catch (ModelNotFoundException $e) {
