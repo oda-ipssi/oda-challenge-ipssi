@@ -1,23 +1,48 @@
 <?php
+
 namespace App\Http\Managers;
+
+
 /**
-* Class to handle users tables with their stored data
-*/
+ * Class TableManager
+ * @package App\Http\Managers
+ */
 class TableManager
 {
-    /*
-    Declaring variable to store singleton
-    */
+    /**
+     * Declaring variable to store singleton
+     * @var null
+     */
     private static $_instance = null;
-    /*
-    * Declaring useful parameters used in the class
-    */
-    public  $data;
+
+
+    /**
+     * Declaring useful parameters used in the class
+     * @var
+     */
+    public  $datas;
     private $userId;
-    private $tableName;
+    public $tableName;
 
-    /*Declaring the class' methods*/
 
+    /**
+     * TableManager constructor.
+     * @param $name
+     */
+    private function __construct($name)
+    {
+        //$this->userID = $id;
+        $this->tableName = $name;
+        if(is_null($this->datas)){
+            $this->loadData();
+        }
+    }
+
+
+    /**
+     * @param $name
+     * @return TableManager|null
+     */
     public static function getInstance($name)
     {
         if(is_null(self::$_instance)) {
@@ -26,27 +51,25 @@ class TableManager
         return self::$_instance;
     }
 
-    /*Affecting useful parameters to allow class to work properly*/
-    private function __construct($name)
-    {
-        //$this->userID = $id;
-        $this->tableName = $name;
-        if(is_null($this->data)){
-            $this->loadData();
-        }
-    }
 
+    /**
+     * load data in the json object given
+     * @return mixed
+     */
     private function loadData()
     {
         /*Method to load data*/
 
-        $this->data = json_decode(file_get_contents("https://api.myjson.com/bins/10dyk"));
+        return $this->datas = json_decode(file_get_contents("https://api.myjson.com/bins/10dyk"));
+
     }
 
+
+    /**
+     * @return path
+     */
     public function saveData()
     {
-        /*Method to save data*/
-        //dd(public_path()."/".$this->tableName.".json");
         file_put_contents(database_path()."/jables/".$this->tableName.".json", json_encode($this->data));
     }
 }

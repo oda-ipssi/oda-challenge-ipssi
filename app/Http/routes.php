@@ -152,6 +152,8 @@ header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-To
      */
     Route::get('/table', ['uses' =>'TableController@storeTable']);
 
+    Route::post('/table/test', ['uses' =>'TableController@testTable']);
+
 // BULLSHIT COMMENTED TO DELETE ? :-)
 //--------------------------------------
 
