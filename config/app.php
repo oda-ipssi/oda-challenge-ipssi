@@ -161,7 +161,12 @@ return [
          */
         Barryvdh\Debugbar\ServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
+<<<<<<< HEAD
         Barryvdh\DomPDF\ServiceProvider::class,
+=======
+        Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class
+>>>>>>> master
 
     ],
 
@@ -210,7 +215,12 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
+<<<<<<< HEAD
         'PDF' => Barryvdh\DomPDF\Facade::class,
+=======
+        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+        'Cors' => Barryvdh\Cors\ServiceProvider::class,
+>>>>>>> master
 
     ],
 
