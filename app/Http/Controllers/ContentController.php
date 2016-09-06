@@ -51,9 +51,9 @@ class ContentController extends Controller
 
        	// validate       
         $rules = array(
-            'title'       => 'required',
-            'content'      => 'required',
-            'url' => 'required'
+            'data.title'       => 'required',
+            'data.content'      => 'required',
+            'data.url' => 'required'
         );
         $validator = Validator::make($request->all(), $rules);
 
@@ -65,9 +65,9 @@ class ContentController extends Controller
         } else {
             // store
             $content = new Content; 
-            $content->title       = $request->get('title');
-            $content->content      = $request->get('content');
-            $content->url =  $request->get('url');
+            $content->title       = $request->get('data')['title'];
+            $content->content      = $request->get('data')['content'];
+            $content->url =  $request->get('data')['url'];
             $content->save();
            
             
@@ -127,15 +127,13 @@ class ContentController extends Controller
      */
     public function update($url,  Request $request)
     {
-        
-        $password = $request->get('password');
-        $newPassword = $request->get('new_password');
+
     	$content = "";
 
         $rules = array(
-            'title'       => 'required',
-            'content'      => 'required',
-            'url' => 'required'
+            'data.title'  => 'required',
+            'data.content' => 'required',
+            'data.url' => 'required'
         );
         $validator = Validator::make($request->all(), $rules);
 
@@ -146,10 +144,10 @@ class ContentController extends Controller
       
         } else {
             // store
-            $content = Content::where('url','like', '%' .$url. '%') ->first(); 
-            $content->title       = $request->get('title');
-            $content->content      = $request->get('content');
-            $content->url =  $request->get('url');
+            $content = Content::where('url','like', '%' .$url. '%') ->first();
+            $content->title       = $request->get('data')['title'];
+            $content->content      = $request->get('data')['content'];
+            $content->url =  $request->get('data')['url'];
             $content->save();
 
             

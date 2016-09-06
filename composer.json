@@ -10,7 +10,10 @@
         "barryvdh/laravel-debugbar": "^2.2",
         "zizaco/entrust": "5.2.x-dev",
         "guzzlehttp/guzzle": "~5.3|~6.0",
-        "hedronium/jables": "^0.2.2"
+        "hedronium/jables": "^0.2.2",
+        "barryvdh/laravel-dompdf": "^0.7.0",
+        "tymon/jwt-auth": "0.5.*",
+        "barryvdh/laravel-cors": "^0.8.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
