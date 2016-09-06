@@ -73,8 +73,8 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
         Route::group(['middleware' => ['customer'], 'prefix' => 'customer'], function() {
 
-                // Gestion des rôles
-                Route::resource('role', 'RoleController', ['except' => [
+                // Gestion des associate
+                Route::resource('associate', 'AssociateController', ['except' => [
                     'show', 'create', 'edit'
                 ]]);
 
@@ -181,6 +181,3 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
 
     });
-
-
-
