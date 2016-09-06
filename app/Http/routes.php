@@ -27,16 +27,16 @@ header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-To
  * ----------------------------------------------------------------------------------------------------
  */
 
-        /**
-         * -----------------------------------------------------
-         * Sign in
-         * -----------------------------------------------------
-         */
+/**
+ * -----------------------------------------------------
+ * Sign in
+ * -----------------------------------------------------
+ */
 
-        Route::post('/sign-in', 'AuthenticateController@authenticate');
+Route::post('/sign-in', 'AuthenticateController@authenticate');
 
 
-        Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
+Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
 
         /**
@@ -73,10 +73,10 @@ header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-To
 
         Route::group(['middleware' => ['customer'], 'prefix' => 'customer'], function() {
 
-            // Gestion des rôles
-            Route::resource('role', 'RoleController', ['except' => [
-                'show', 'create', 'edit'
-            ]]);
+                // Gestion des rôles
+                Route::resource('role', 'RoleController', ['except' => [
+                    'show', 'create', 'edit'
+                ]]);
 
         });
 
@@ -115,14 +115,19 @@ header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-To
          * -----------------------------------------------------
          */
 
+        Route::get('/subscription', 'SubscriptionController@getAllOrders');
 
-        Route::resource('subscription', 'SubscriptionController');
+        Route::get('/subscription/{id}', 'SubscriptionController@index')->where(['id' => '[0-9]+']);
 
-        Route::get('/stopSubscription/{id}', ['uses' =>'SubscriptionController@stopSubscription']);
+        Route::post('/subscription','SubscriptionController@createSubscription');
 
-        Route::get('/renewSubscription/{id}', ['uses' =>'SubscriptionController@renewSubscription']);
+        Route::delete('/subscription/{id}','SubscriptionController@deleteSubscription')->where(['id' => '[0-9]+']);
 
-        Route::get('/downloadInvoice/{id}', ['uses' =>'SubscriptionController@downloadInvoice']);
+        Route::put('/subscription/{id}','SubscriptionController@changeSubscription')->where(['id' => '[0-9]+']);
+
+        Route::put('/subscription/{id}/stop','SubscriptionController@stopSubscription')->where(['id' => '[0-9]+']);
+
+        Route::get('/downloadInvoice/{id}', 'SubscriptionController@downloadInvoice')->where(['id' => '[0-9]+']);
 
         Route::get('/payment','PaymentController@index');
 
@@ -144,7 +149,7 @@ header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-To
         Route::get('/payment/{id}/{mode?}','PaymentController@generateForm')->where(['id' => '[0-9]+']);
 
 
-    });
+});
 
 // BULLSHIT COMMENTED TO DELETE ? :-)
 //--------------------------------------
