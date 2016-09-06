@@ -127,9 +127,7 @@ class ContentController extends Controller
      */
     public function update($url,  Request $request)
     {
-        
-        $password = $request->get('');
-        $newPassword = $request->get('new_password');
+
     	$content = "";
 
         $rules = array(
