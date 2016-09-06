@@ -13,16 +13,25 @@
  * ----------------------------------------------------------------------------------------------------
  */
 
-/**
- * -----------------------------------------------------
- * Sign in
- * -----------------------------------------------------
- */
+    /**
+     * -----------------------------------------------------
+     * Sign in
+     * -----------------------------------------------------
+     */
 
-Route::post('/sign-in', 'AuthenticateController@authenticate');
+    Route::post('/sign-in', 'AuthenticateController@authenticate');
+
+    Route::post('/table/test', ['uses' =>'TableController@testTable'])->middleware('cors');
+
+Route::post('/test/jables', ['middleware' => 'cors', function(Request $request)
+{
+    dump($request);
+    die;
+    return response()->json(['status' => '200', 'message' => "Je suis ton PERE"]);
+}]);
 
 
-Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
+    Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
 
         /**
@@ -59,8 +68,8 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
         Route::group(['middleware' => ['customer'], 'prefix' => 'customer'], function() {
 
-                // Gestion des rôles
-                Route::resource('role', 'RoleController', ['except' => [
+                // Gestion des associate
+                Route::resource('associate', 'AssociateController', ['except' => [
                     'show', 'create', 'edit'
                 ]]);
 
@@ -168,5 +177,27 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
     });
 
+    /**
+     * Own user Table Management
+     *
+     */
+    Route::get('/table', ['uses' =>'TableController@storeTable']);
 
 
+
+// BULLSHIT COMMENTED TO DELETE ? :-)
+//--------------------------------------
+
+// // Authentication Routes...
+// $this->get('login', 'Auth\AuthController@showLoginForm');
+// $this->post('login', 'Auth\AuthController@login');
+// $this->get('logout', 'Auth\AuthController@logout');
+//
+// // Registration Routes...
+// $this->get('register', 'Auth\AuthController@showRegistrationForm');
+// $this->post('register', 'Auth\AuthController@register');
+//
+// // Password Reset Routes...
+// $this->get('password/reset/{token?}', 'Auth\PasswordController@showResetForm');
+// $this->post('password/email', 'Auth\PasswordController@sendResetLinkEmail');
+// $this->post('password/reset', 'Auth\

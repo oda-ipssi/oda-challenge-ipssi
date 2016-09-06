@@ -97,6 +97,7 @@ class ContentController extends Controller
         return response()->json(['status' => $this->status, 'data' => $content , 'message' => $this->message]);   
     }
 
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -105,9 +106,7 @@ class ContentController extends Controller
      */
     public function edit($url)
     {
-        
-
-         // get the content
+        // get the content
         $content = Content::where('url','like', '%' .$url. '%') ->first();       
         
         if(!$content){
@@ -118,6 +117,7 @@ class ContentController extends Controller
 
         return response()->json(['status' => $this->status, 'data' => $content , 'message' => $this->message]); 
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -155,6 +155,7 @@ class ContentController extends Controller
         }
         return response()->json(['status' => $this->status_create, 'data' => $content , 'message' => $this->message_create]); 
     }
+
 
     /**
      * Remove the specified resource from storage.
