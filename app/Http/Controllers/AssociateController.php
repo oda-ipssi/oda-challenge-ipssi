@@ -44,12 +44,10 @@ class AssociateController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $userRequest, AssociateRepository $associate_gestion)
+    public function store(UserRequest $userRequest, AssociateRepository $associate_gestion)
     {
-          // $newUser = $this->userRepository->createUser($userRequest->get('data'));
-          // $idUser = Auth::user()->id;
           $idUser = 2;
-          $newUser = $associate_gestion->store($userRequest->all(), $idUser);
+          $newUser = $associate_gestion->store($userRequest->get('data'), $idUser);
           $newUser->save();
 
           $roleUndercustomer = Role::where('name', 'role_undercustomer')->first();
