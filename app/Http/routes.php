@@ -10,7 +10,7 @@
  */
 
 header('Access-Control-Allow-Origin: http://localhost:9000');
-header('Access-Control-Allow-Methods: GET, POST, PUT' );
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE' );
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-Token, Origin, Authorization');
 
@@ -27,16 +27,16 @@ header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-To
  * ----------------------------------------------------------------------------------------------------
  */
 
-        /**
-         * -----------------------------------------------------
-         * Sign in
-         * -----------------------------------------------------
-         */
+    /**
+     * -----------------------------------------------------
+     * Sign in
+     * -----------------------------------------------------
+     */
 
-        Route::post('/sign-in', 'AuthenticateController@authenticate');
+    Route::post('/sign-in', 'AuthenticateController@authenticate');
 
 
-        Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
+    Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
 
         /**
@@ -73,10 +73,10 @@ header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-To
 
         Route::group(['middleware' => ['customer'], 'prefix' => 'customer'], function() {
 
-            // Gestion des rôles
-            Route::resource('role', 'RoleController', ['except' => [
-                'show', 'create', 'edit'
-            ]]);
+                // Gestion des rôles
+                Route::resource('role', 'RoleController', ['except' => [
+                    'show', 'create', 'edit'
+                ]]);
 
         });
 
@@ -101,36 +101,56 @@ header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-To
 
 
         /**
-         * -----------------------------------------------------
-         * Registration
-         * -----------------------------------------------------
-         */
+        * -----------------------------------------------------
+        * Registration
+        * -----------------------------------------------------
+        */
 
         Route::post('/registration', ['uses' => 'UsersController@createUser']);
 
 
         /**
-         * -----------------------------------------------------
-         * Validation
-         * -----------------------------------------------------
-         */
+        * -----------------------------------------------------
+        * Account
+        * -----------------------------------------------------
+        */
+
+        Route::put('/account/{id}/password', 'AccountController@editPassword')->where(['id' => '[0-9]+']);
+
+        Route::get('/account/{id}', 'AccountController@show')->where(['id' => '[0-9]+']);
+
+        Route::put('/account/{id}', 'AccountController@update')->where(['id' => '[0-9]+']);
 
 
-        Route::resource('subscription', 'SubscriptionController');
-
-        Route::get('/stopSubscription/{id}', ['uses' =>'SubscriptionController@stopSubscription']);
-
-        Route::get('/renewSubscription/{id}', ['uses' =>'SubscriptionController@renewSubscription']);
-
-        Route::get('/downloadInvoice/{id}', ['uses' =>'SubscriptionController@downloadInvoice']);
-
-        Route::get('/payment','PaymentController@index');
-
-        Route::get('/payment/{id}/{mode?}','PaymentController@generateForm')->where(['id' => '[0-9]+']);
+        /**
+        * -----------------------------------------------------
+        * Account validation
+        * -----------------------------------------------------
+        */
 
         Route::post('/validation/{token}', ['uses' => 'UsersController@validateUserAccount', 'as' => 'userValidation']);
 
         Route::get('/send/{id}', ['uses' =>'EmailController@sendEmailReminder', 'as'=>'reminderEmail']);
+
+
+        /**
+         * -----------------------------------------------------
+         * Subscription
+         * -----------------------------------------------------
+         */
+        Route::get('/subscription', 'SubscriptionController@getAllOrders');
+
+        Route::get('/subscription/{id}', 'SubscriptionController@index')->where(['id' => '[0-9]+']);
+
+        Route::post('/subscription','SubscriptionController@createSubscription');
+
+        Route::delete('/subscription/{id}','SubscriptionController@deleteSubscription')->where(['id' => '[0-9]+']);
+
+        Route::put('/subscription/{id}','SubscriptionController@changeSubscription')->where(['id' => '[0-9]+']);
+
+        Route::put('/subscription/{id}/stop','SubscriptionController@stopSubscription')->where(['id' => '[0-9]+']);
+
+        Route::get('/downloadInvoice/{id}', 'SubscriptionController@downloadInvoice')->where(['id' => '[0-9]+']);
 
 
         /**
@@ -142,6 +162,22 @@ header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-To
         Route::get('/payment','PaymentController@index');
 
         Route::get('/payment/{id}/{mode?}','PaymentController@generateForm')->where(['id' => '[0-9]+']);
+
+
+        /**
+         * -----------------------------------------------------
+         * Offers
+         * -----------------------------------------------------
+         */
+
+        Route::put('/offers/{id}', 'OfferController@update')->where(['id' => '[0-9]+']);
+
+        Route::post('/offers', 'OfferController@create');
+
+        Route::get('/offers','OfferController@getAllOffers');
+
+        Route::delete('/offers/{id}','OfferController@delete')->where(['id' => '[0-9]+']);
+
 
 
     });

@@ -16,7 +16,8 @@ class Order extends Model
     protected $fillable = [
         'vat',
         'status',
-        'user_id'
+        'user_id',
+        'offer_id'
     ];
 
     protected $guarded = [];

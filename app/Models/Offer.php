@@ -15,6 +15,9 @@ class Offer extends Model
 
     protected $fillable = [
         'title',
+        'has_support',
+        'has_update',
+        'user_limit',
         'description',
         'database_limit',
         'price'
