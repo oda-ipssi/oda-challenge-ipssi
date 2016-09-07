@@ -45,21 +45,14 @@ class TableController extends Controller
     }
 
     /**
-     * Store a new table in database following json returns by front.
+     * get all tables creating by user
      *
      * @return \Illuminate\Http\Response
      */
     public function getDataTable(Request $request, User $user)
     {
-        if ($user)
-        {
-            if (Schema::hasTable('food')) {
-                return response()->json(['status' => '200', 'message' => "The table already exist, no need to re-import !"]);
-            }
-            return response()->json(['status' => $this->status, 'data' => TableManager::getInstance($userId) , 'message' => $this->message]);
-        }
-
-        return response()->json(['status' => '402', 'message' => "No user logged in"]);
+        // $userTables =
+        return response()->json(['status' => $this->status_create, 'data' => $content , 'message' => $this->message_create]);
     }
 
 
@@ -77,13 +70,13 @@ class TableController extends Controller
 
     public function testTable(Request $request)
     {
-        $dataArray = json_decode($request->getContent());
-        $data = json_encode($dataArray);
-        var_dump($data);
+        $datas = json_encode($request->getContent());
+        var_dump($datas);
+        var_dump(empty($datas));
 
-        //if (!$dataArray) {
-            //return response()->json(['status' => '402', 'message' => "Je suis ton PERE"]);
-        //}
+        if (!$datas || empty($datas)) {
+            return response()->json(['status' => '402', 'message' => "Je ne  pas suis ton PERE"]);
+        }
 
         return response()->json(['status' => '200', 'message' => "Je suis ton PERE"]);
     }

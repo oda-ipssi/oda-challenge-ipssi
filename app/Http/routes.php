@@ -9,10 +9,10 @@
  * ----------------------------------------------------------------------------------------------------
  */
 
-header('Access-Control-Allow-Origin: http://localhost:9000');
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE' );
-header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-Token, Origin, Authorization');
+//header('Access-Control-Allow-Origin: http://localhost:9000');
+//header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE' );
+//header('Access-Control-Allow-Credentials: true');
+//header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-Token, Origin, Authorization');
 
 
 /**
@@ -37,16 +37,7 @@ header('Access-Control-Allow-Headers:  X-Requested-With, Content-Type, X-Auth-To
 
     Route::post('/table/test', ['uses' =>'TableController@testTable'])->middleware('cors');
 
-Route::post('/test/jables', ['middleware' => 'cors', function(Request $request)
-{
-    dump($request);
-    die;
-    return response()->json(['status' => '200', 'message' => "Je suis ton PERE"]);
-}]);
-
-
     Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
-
 
         /**
          * -----------------------------------------------------
