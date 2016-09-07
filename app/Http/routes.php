@@ -152,7 +152,6 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
      * Subscription
      * -----------------------------------------------------
      */
-    Route::get('/subscriptions', 'SubscriptionController@getAllOrders');
 
     Route::get('/subscription', 'SubscriptionController@getOrder');
 
@@ -193,21 +192,19 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
 
 
-        /**
-         * -----------------------------------------------------
-         * Orders
-         * -----------------------------------------------------
-         */
+    /**
+     * -----------------------------------------------------
+     * Orders
+     * -----------------------------------------------------
+     */
 
+    Route::get('/orders','OrderController@getAllOrders');
 
+    Route::get('/orders/{id}','OrderController@show')->where(['id' => '[0-9]+']);;
 
-        Route::get('/orders','OrderController@index');
+    Route::get('/orders/download/{id}','OrderController@download')->where(['id' => '[0-9]+']);;
 
-        Route::get('/orders/{id}','OrderController@show')->where(['id' => '[0-9]+']);;
-
-        Route::get('/orders/download/{id}','OrderController@download')->where(['id' => '[0-9]+']);;
-
-    });
+});
 
 /**
  * Own user Table Management

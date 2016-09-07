@@ -203,30 +203,9 @@ class SubscriptionController extends Controller
         $html = $view->render();
 
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML($html)->save($this->generatePdfName($user, $payment));
+        $pdf->loadHTML($html)->save($this->helper->generatePdfName($user, $payment));
 
-        return  response()->json($html, 200, ['Response Ok']);
-
-    }
-
-
-    /**
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getAllOrders(){
-        $orders = DB::table('orders')->orderBy('created_at', 'desc')->get();
-
-        return response()->json(['orders' => $orders], 200, ['OK']);
-    }
-
-    /**
-     * @param User $user
-     * @param Payment $payment
-     * @return string
-     */
-    private function generatePdfName(User $user, $payment) {
-
-        return 'invoice_'.$user->username.'_'.$user->id.'_'.substr($payment->created_at,0, 10).'.pdf';
+        return $this->helper->createResponse($html, 200, trans('order.invoice.success', [], 'order'));
 
     }
 
