@@ -57,7 +57,7 @@ class SubscriptionController extends Controller
         $order = Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
 
         if(!$order){
-            return $this->helper->createResponse([], 400, trans('order.not.found', [], 'order'));
+            return $this->helper->createResponse([], 400, trans('order.get.notfound', [], 'order'));
         } else {
             return $this->helper->createResponse(['order'=> $order], 200, trans('order.get.success', [], 'order'));
         }
@@ -84,10 +84,10 @@ class SubscriptionController extends Controller
      * @param $userId
      * @param $offerId
      */
-    public function subscriptionFactory($userId, $offerId) {
+    public function subscriptionFactory($offerId) {
 
         $offer = Offer::findOrFail($offerId);
-        $user = User::findOrFail($userId);
+        $user = JWTAuth::parseToken()->authenticate();
 
         switch ($offer->price) {
             case 0 :
@@ -148,9 +148,9 @@ class SubscriptionController extends Controller
      * @throws \Exception
      * @throws \Throwable
      */
-    public function downloadInvoice($order_id, Request $request) {
+    public function downloadInvoice($order_id) {
 
-        $user = $request->get('data')['userId'];
+        $user = JWTAuth::parseToken()->authenticate();
 
         $payment = DB::table('payments')->where([
             ['user_id', '=', $user->id],
