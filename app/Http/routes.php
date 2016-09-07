@@ -65,6 +65,7 @@ Route::get('/content/{url}', ['uses' =>'ContentController@show']);
 
 Route::get('/offers','OfferController@getAllOffers');
 
+    Route::get('/offers/{id}','OfferController@show')->where(['id' => '[0-9]+']);
 
 
 

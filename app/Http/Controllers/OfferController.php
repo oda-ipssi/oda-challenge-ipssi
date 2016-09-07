@@ -46,6 +46,25 @@ class OfferController extends Controller
 
     /**
      * @param $id
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function show($id) {
+
+        try{
+
+            $offer = Offer::findOrFail($id);
+            return $this->helper->createResponse($offer, 200, trans("offer.response.ok", [], 'offer'));
+
+        } catch (ModelNotFoundException $e) {
+
+            return $this->helper->createResponse([], 404, trans("offer.response.notfound", [], 'offer'));
+
+        }
+
+    }
+
+    /**
+     * @param $id
      * @param OfferRequest $offerRequest
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
