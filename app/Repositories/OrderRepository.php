@@ -11,11 +11,17 @@ use Carbon\Carbon;
  */
 class OrderRepository
 {
-
     /**
-     * @param $data
+     * @param Order $order
+     * @param Offer $offer
+     * @return Order
      */
-    public function editOrder($data) {
+    public function editOrder(Order $order, Offer $offer) {
+
+        $order->offer_id = $offer->id;
+        $order->updated_at = Carbon::now()->format('Y-m-d H:i:s');
+
+        return $order;
 
     }
 

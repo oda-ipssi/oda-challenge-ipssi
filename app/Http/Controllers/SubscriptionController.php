@@ -12,6 +12,7 @@ use Session;
 use DB;
 use PDF;
 use App;
+use App\Http\Services\Helper;
 use Symfony\Component\HttpFoundation\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -30,7 +31,7 @@ class SubscriptionController extends Controller
     private $orderRepository;
 
     /**
-     * @var App\Http\Services\Helper
+     * @var App\Http\Services\Helper $helper
      */
     private $helper;
 
@@ -75,28 +76,56 @@ class SubscriptionController extends Controller
 
         $this->userRepository->validateUser($user)->save();
 
-        return $this->helper->createResponse(compact($order, $user), 400, trans('order.create.success', [], 'order'));
+        return $this->helper->createResponse(compact($order, $user), 200, trans('order.change.success', [], 'order'));
 
 
     }
 
     /**
-     * @param $userId
-     * @param $offerId
+     * @param User $user
+     * @param Offer $offer
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    public function subscriptionFactory($offerId) {
+    private function updateSubscription(Order $order, User $user, Offer $offer){
 
-        $offer = Offer::findOrFail($offerId);
+        $order = $this->orderRepository->editOrder($order,$offer)->save();
+
+        $this->userRepository->validateUser($user)->save();
+
+        return $this->helper->createResponse(compact($order, $user), 400, trans('order.update.success', [], 'order'));
+
+
+    }
+
+    /**
+     * @param $offerId
+     * @param Order|null $order
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function subscriptionFactory($offerId, Order $order = null, Request $request) {
+
+        $offer = Offer::find($offerId);
+
         $user = JWTAuth::parseToken()->authenticate();
 
-        switch ($offer->price) {
-            case 0 :
-                $this->createSubscription($user, $offer);
-                break;
-            default:
-                // TODO redirect to payment
+        if($user){
+            switch ($offer->price) {
+                case 0 :
+                    if($order!=null){
+                        return $this->updateSubscription($order,$user,$offer);
+                    } else {
+                        return $this->createSubscription($user, $offer);
+                    }
+                    break;
+                default:
+                    // TODO redirect to payment
+                    return $this->helper->createResponse([], 404, 'REDIRECT TO PAYMENT');
+            }
+        } else {
+            $request->getSession()->set('user-registration-offer', $offerId);
+            return redirect()->route('registration');
         }
-
     }
 
     /**
@@ -113,16 +142,24 @@ class SubscriptionController extends Controller
      * @param $offerId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function changeSubscription($orderId, $offerId){
+    public function changeSubscription($orderId, Request $request){
 
-        $order = Order::find($orderId);
+        $order = Order::findOrFail($orderId);
         $userId = $order->user_id;
+        $user = JWTAuth::parseToken()->authenticate();
 
-        if($order->offer_id != $offerId){
-            $this->subscriptionFactory($userId, $offerId);
+        //to modify to get data
+        $offerId = $request->get('offerId');
+
+        if($order->offer_id != $offerId && $userId == $user->id){
+            $response = $this->subscriptionFactory($offerId,$order);
+
+            return $response;
+        } else {
+            return $this->helper->createResponse([], 403, trans('order.change.notallowed', [], 'order'));
         }
 
-        return $this->helper->createResponse($order, 422, trans('order.change.same', [], 'order'));
+
 
     }
 

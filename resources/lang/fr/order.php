@@ -39,12 +39,21 @@ return [
         'success' => "Succès",
         'notfound' => "Ressource non trouvée",
     ],
+    'update' => [
+        'error' => "Erreur",
+        'success' => "Succès",
+        'notfound' => "Ressource non trouvée",
+    ],
     'delete' => [
         'not_allowed' => 'Suppression interdite !'
     ],
     'change' => [
-        'same' => 'Vous demandez la même offre !',
-        'stop' => 'Vous avez stoppé votre abonnement !'
+        'notallowed' => 'Vous demandez la même offre !',
+        'stop' => 'Vous avez stoppé votre abonnement !',
+        'success' => 'Offre modifiée !'
+    ],
+    'forbidden' => [
+        'error' => 'Vous n\'avez pas l\autorisation!'
     ]
 
 ];
