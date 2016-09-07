@@ -9,6 +9,19 @@ use Illuminate\Hashing\BcryptHasher;
  */
 class UserRepository
 {
+
+
+    /**
+     * @return int
+     */
+    public function getAllUsersNumber(){
+        return User::all()->count();
+    }
+
+    public function getActiveUsersNumber(){
+        return User::where('is_active',1)->count();
+    }
+
     /**
      * @param $data
      * @param User $user
