@@ -66,11 +66,12 @@ class UserRepository
     }
 
     /**
-     * @param $user
-     *
+     * @param User $user
+     * @return User
      */
-    public function validateUser($user){
+    public function validateUser(User $user){
         $user->is_active = 1;
         return $user;
     }
+
 }

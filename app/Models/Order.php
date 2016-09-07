@@ -9,6 +9,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Order extends Model
 {
+
+    const STATUS_OK = 1;
+    const STATUS_RENEWED = 2;
+    const STATUS_STOP = 3;
+
+
     protected $table = 'orders';
 
     public $timestamps = true;

@@ -16,7 +16,7 @@ class CreateOrdersTable extends Migration {
 		{
 			$table->integer('id',true);
 			$table->integer('vat')->nullable();
-			$table->string('status', 12)->nullable();
+			$table->integer('status');
 			$table->integer('user_id',false,false);
 			$table->integer('offer_id');
 			$table->date('created_at')->nullable();
