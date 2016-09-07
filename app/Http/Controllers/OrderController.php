@@ -59,8 +59,7 @@ class OrderController extends Controller
         if(!$order){
             return $this->helper->createResponse([], 400, trans('order.get.notfound', [], 'order'));
         }else{
-            $user = User::where('id', $order->user_id)->get();
-            return $this->helper->createResponse(compact($order, $user), 400, trans('order.get.success', [], 'order'));
+            return $this->helper->createResponse($order, 200, trans('order.get.success', [], 'order'));
         }
     }
 
