@@ -2,7 +2,6 @@
 
 use Closure;
 use Entrust;
-use Auth;
 use App;
 
 class Admin {
@@ -16,7 +15,7 @@ class Admin {
     */
     public function handle($request, Closure $next)
     {
-        if (!Entrust::hasRole('role_admin') && Auth::check()) {
+        if (!Entrust::hasRole('role_admin')) {
             return response()->json(trans('messages.forbidden'));
         }
         return $next($request);

@@ -6,66 +6,126 @@ use App\Models\Order;
 use App\Models\Offer;
 use App\Models\Payment;
 use Carbon\Carbon;
+use Faker\Provider\ka_GE\DateTime;
+use Illuminate\View\View;
 use Session;
 use DB;
 use PDF;
 use App;
+use App\Http\Services\Helper;
+use Symfony\Component\HttpFoundation\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 
 class SubscriptionController extends Controller
 {
-    private $status = 200;
-    private $message = ['OK'];
+
+    /**
+     * @var App\Repositories\UserRepository $userRepository
+     */
+    private $userRepository;
+
+    /**
+     * @var App\Repositories\OrderRepository $orderRepository
+     */
+    private $orderRepository;
+
+    /**
+     * @var App\Http\Services\Helper $helper
+     */
+    private $helper;
 
 
     /**
-     * Return all the commands for one users
-     * @param $userId
+     * SubscriptionController constructor.
+     * @param App\Repositories\UserRepository $userRepository
+     * @param App\Repositories\OrderRepository $orderRepository
+     */
+    public function __construct(App\Repositories\UserRepository $userRepository, App\Repositories\OrderRepository $orderRepository, Helper $helper)
+    {
+        $this->userRepository = $userRepository;
+        $this->orderRepository = $orderRepository;
+        $this->helper = $helper;
+    }
+
+
+    /**
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index($userId){
-        $order = Order::where('user_id', $userId)->orderBy('created_at', 'desc')->get();
+    public function getOrder(){
+
+        $user = JWTAuth::parseToken()->authenticate();
+        $order = Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
 
         if(!$order){
-            return  response()->json('',  404, 'Not found');
+            return $this->helper->createResponse([], 400, trans('order.get.notfound', [], 'order'));
         } else {
-            return  response()->json(['order' => $order],  $this->status, $this->message);
+            return $this->helper->createResponse(['order'=> $order], 200, trans('order.get.success', [], 'order'));
         }
     }
 
-    // show one command with possibillity to download the invoice
-    // create one subscription
-    // delete one subscription
-    // upgrade offer
 
     /**
-     * @param $userId
-     * @param $offerId
-     * @return \Illuminate\Http\JsonResponse
+     * @param User $user
+     * @param Offer $offer
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    public function createSubscription($userId,$offerId){
-        $order = new Order();
-        //if pay
-        //get value return
-        $order->vat = 20;
-        $order->status = 'OK';
-        $order->user_id = $userId;
-        $order->offer_id = $offerId;
-        $order->created_at = Carbon::now()->format('Y-m-d H:i:s');
-        $order->updated_at = Carbon::now()->format('Y-m-d H:i:s');
-        $order->price = 20;
+    private function createSubscription(User $user, Offer $offer){
 
-        $order->save();
+        $order = $this->orderRepository->createOrder($user, $offer)->save();
 
-        //activate user
-        $user = User::find($userId);
+        $this->userRepository->validateUser($user)->save();
 
-        $user->is_active = 1;
+        return $this->helper->createResponse(compact($order, $user), 200, trans('order.change.success', [], 'order'));
 
-        $user->save();
 
-        return  response()->json(['order' => $order, 'user' => $user],  $this->status, 'Order created');
+    }
 
+    /**
+     * @param User $user
+     * @param Offer $offer
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    private function updateSubscription(Order $order, User $user, Offer $offer){
+
+        $order = $this->orderRepository->editOrder($order,$offer)->save();
+
+        $this->userRepository->validateUser($user)->save();
+
+        return $this->helper->createResponse(compact($order, $user), 400, trans('order.update.success', [], 'order'));
+
+
+    }
+
+    /**
+     * @param $offerId
+     * @param Order|null $order
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function subscriptionFactory($offerId, Order $order = null, Request $request) {
+
+        $offer = Offer::find($offerId);
+
+        $user = JWTAuth::parseToken()->authenticate();
+
+        if($user){
+            switch ($offer->price) {
+                case 0 :
+                    if($order!=null){
+                        return $this->updateSubscription($order,$user,$offer);
+                    } else {
+                        return $this->createSubscription($user, $offer);
+                    }
+                    break;
+                default:
+                    // TODO redirect to payment
+                    return $this->helper->createResponse([], 404, 'REDIRECT TO PAYMENT');
+            }
+        } else {
+            $request->getSession()->set('user-registration-offer', $offerId);
+            return redirect()->route('registration');
+        }
     }
 
     /**
@@ -73,12 +133,8 @@ class SubscriptionController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function deleteSubscription($orderId){
-        $order = Order::find($orderId);
 
-        $order->delete();
-
-        return  response()->json('',  $this->status,'Order deleted');
-
+        return $this->helper->createResponse([], 422, trans('order.delete.not_allowed', [], 'order'));
     }
 
     /**
@@ -86,17 +142,24 @@ class SubscriptionController extends Controller
      * @param $offerId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function changeSubscription($orderId,$offerId){
-        $order = Order::find($orderId);
+    public function changeSubscription($orderId, Request $request){
 
-        //if(pay)
-        if($order->offer_id != $offerId){
-            $order->offer_id = $offerId;
+        $order = Order::findOrFail($orderId);
+        $userId = $order->user_id;
+        $user = JWTAuth::parseToken()->authenticate();
+
+        //to modify to get data
+        $offerId = $request->get('offerId');
+
+        if($order->offer_id != $offerId && $userId == $user->id){
+            $response = $this->subscriptionFactory($offerId,$order);
+
+            return $response;
+        } else {
+            return $this->helper->createResponse([], 403, trans('order.change.notallowed', [], 'order'));
         }
 
-        $order->save();
 
-        return  response()->json(['order' => $order],  $this->status, 'Order created');
 
     }
 
@@ -108,68 +171,63 @@ class SubscriptionController extends Controller
 
         $order = Order::find($orderId);
 
-        $order->status = 'STOP';
+        $order->status = Order::STATUS_STOP;
         $order->save();
 
-        return  response()->json(['order' => $order],  200, 'order stopped');
+        return $this->helper->createResponse($order, 200, trans('order.change.stop', [], 'order'));
+
     }
 
+    /**
+     * @param $order_id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     * @throws \Throwable
+     */
     public function downloadInvoice($order_id) {
 
-        $payment = Payment::where('order_id',$order_id)->first();
-        $user = User::find($payment->user_id);
+        $user = JWTAuth::parseToken()->authenticate();
+
+        $payment = DB::table('payments')->where([
+            ['user_id', '=', $user->id],
+            ['order_id', '=', $order_id],
+        ])->get();
+
+        $payment = $payment[0];
+
         $order = Order::find($order_id);
         $offer = Offer::find($order->offer_id);
 
-        $html = '
-    		<html>
-    			<head>
-    				<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    			</head>
-
-    			<body>
-		    		<h1>Invoice #'.$payment->id.'</h1>
-		    		<h2>Payment information</h2>
-		    		<p>Payment method : '.$payment->paymentMethod.'</p>
-		    		<p>Card number : '.$payment->cardNumber.'</p>
-		    		<p>Expiration date : '.$payment->expirationDate.'</p>
-
-		    		<h2>Billing details</h2>
-		    		<p><b>'.$user->lastname.' '.$user->firstname.':</b></p>
-		    		<p>'.$user->address.'</p>
-		    		<p>'.$user->zipcode.'</p>
-		    		<p>'.$user->city.'</p>
-		    		<p>'.$user->phone.'</p>
-
-		    		<h2>Order summary</h2>
-		    		<table width="200"  align="left">
-		    			<tr>
-		    				<th>Offer</th>
-		    				<th>Database limit</th>
-		    				<th>Price</th>
-		    			</tr>
-
-		    			<tr>
-		    				<td>'.$offer->title.'</td>
-		    				<td>'.$offer->database_limit.'</td>
-		    				<td>'.$offer->price.'€</td>
-		    			</tr>
-		    		</table>
-		    	</body>
-		    <html>';
+        $view = view ('invoice/subscription',  ['user' => $user, 'offer' => $offer, 'payment' => $payment]);
+        $html = $view->render();
 
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML($html)->save('invoice.pdf');
+        $pdf->loadHTML($html)->save($this->generatePdfName($user, $payment));
 
-        return  response()->json($pdf->stream(), 200, ['Response Ok']);
+        return  response()->json($html, 200, ['Response Ok']);
 
     }
 
 
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getAllOrders(){
         $orders = DB::table('orders')->orderBy('created_at', 'desc')->get();
 
         return response()->json(['orders' => $orders], 200, ['OK']);
+    }
+
+    /**
+     * @param User $user
+     * @param Payment $payment
+     * @return string
+     */
+    private function generatePdfName(User $user, $payment) {
+
+        return 'invoice_'.$user->username.'_'.$user->id.'_'.substr($payment->created_at,0, 10).'.pdf';
+
     }
 
 

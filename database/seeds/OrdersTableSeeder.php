@@ -18,7 +18,7 @@ class OrdersTableSeeder extends Seeder
         foreach($user_ids as $user_id){
             DB::table('orders')->insert([
                 'vat' => 20,
-                'status' => 'OK',
+                'status' => 1,
                 'user_id' => $user_id->user_id,
                 'offer_id' => 2,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
