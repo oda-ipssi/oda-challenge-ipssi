@@ -55,6 +55,7 @@
 
     Route::get('/offers','OfferController@getAllOffers');
 
+    Route::get('/offers/{id}','OfferController@show')->where(['id' => '[0-9]+']);
 
     Route::post('/table/test', ['uses' =>'TableController@testTable'])->middleware('cors');
 
