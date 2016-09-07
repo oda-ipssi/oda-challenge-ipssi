@@ -40,9 +40,22 @@ class UsersController extends Controller
      * @param  UserRequest $userRequest
      * @return \Illuminate\Http\Response
      */
-    public function createUser(UserRequest $userRequest) {
+    public function createUser(Request $userRequest) {
 
-        $newUser = $this->userRepository->createUser($userRequest->get('data'));
+        $temp = [
+            'username' => $userRequest->get('username'),
+            'email' => $userRequest->get('email'),
+            'firstname' => $userRequest->get('firstname'),
+            'lastname' => $userRequest->get('lastname'),
+            'address' => $userRequest->get('address'),
+            'zipcode' => $userRequest->get('zipcode'),
+            'city' => $userRequest->get('city'),
+            'phone' => $userRequest->get('phone'),
+            'password' => $userRequest->get('password')
+
+        ];
+
+        $newUser = $this->userRepository->createUser($temp);
         $newUser->save();
 
         /* TODO TEST WITH THE MAIL SERVER CONFIGURED */
