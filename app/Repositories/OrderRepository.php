@@ -46,4 +46,15 @@ class OrderRepository
     }
 
 
+    public function getValidOrdersNumber()
+    {
+        return Order::where('status',Order::STATUS_OK)->count();
+    }
+
+    public function getValidOrdersSum()
+    {
+        return Order::where('status',Order::STATUS_OK)->sum('price');
+    }
+
+
 }
