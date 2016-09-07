@@ -45,5 +45,16 @@ class Helper
 
     }
 
+    /**
+     * @param User $user
+     * @param Payment $payment
+     * @return string
+     */
+    public function generatePdfName(User $user, $payment) {
+
+        return 'invoice_'.$user->username.'_'.$user->id.'_'.substr($payment->created_at,0, 10).'.pdf';
+
+    }
+
 
 }

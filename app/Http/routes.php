@@ -12,62 +12,76 @@
  * ----------------------------------------------------------------------------------------------------
  */
 
-    /**
-     * -----------------------------------------------------
-     * Home
-     * -----------------------------------------------------
-     */
+/**
+ * -----------------------------------------------------
+ * Home
+ * -----------------------------------------------------
+ */
 
-    Route::get('/', 'IndexController@index');
+Route::get('/', 'IndexController@index');
 
-    Route::get('/home', 'HomeController@index');
+Route::get('/home', 'HomeController@index');
 
-    /**
-     * -----------------------------------------------------
-     * Sign in
-     * -----------------------------------------------------
-     */
+/**
+ * -----------------------------------------------------
+ * Sign in
+ * -----------------------------------------------------
+ */
 
-    Route::post('/sign-in', 'AuthenticateController@authenticate');
+Route::post('/sign-in', 'AuthenticateController@authenticate');
 
-    /**
-     * -----------------------------------------------------
-     * Registration
-     * -----------------------------------------------------
-     */
+/**
+ * -----------------------------------------------------
+ * Registration
+ * -----------------------------------------------------
+ */
 
-    Route::post('/registration', ['uses' => 'UsersController@createUser'])->name('registration');
+Route::post('/registration', ['uses' => 'UsersController@createUser'])->name('registration');
 
-    /**
-     * -----------------------------------------------------
-     * Content
-     * -----------------------------------------------------
-     */
+/**
+ * -----------------------------------------------------
+ * Account validation
+ * -----------------------------------------------------
+ */
 
-    Route::get('/content/{url}', ['uses' =>'ContentController@show']);
+Route::post('/validation/{token}', ['uses' => 'UsersController@validateUserAccount', 'as' => 'userValidation']);
+
+Route::get('/send/{id}', ['uses' =>'EmailController@sendEmailReminder', 'as'=>'reminderEmail']);
+
+/**
+ * -----------------------------------------------------
+ * Content
+ * -----------------------------------------------------
+ */
+
+Route::get('/content/{url}', ['uses' =>'ContentController@show']);
 
 
-    /**
-     * -----------------------------------------------------
-     * Offers
-     * -----------------------------------------------------
-     */
+/**
+ * -----------------------------------------------------
+ * Offers
+ * -----------------------------------------------------
+ */
 
-    Route::get('/offers','OfferController@getAllOffers');
+Route::get('/offers','OfferController@getAllOffers');
 
     Route::get('/offers/{id}','OfferController@show')->where(['id' => '[0-9]+']);
 
-    Route::post('/table/test', ['uses' =>'TableController@testTable'])->middleware('cors');
-
-    Route::post('/test/jables', ['middleware' => 'cors', function(Request $request)
-    {
-        dump($request);
-        die;
-        return response()->json(['status' => '200', 'message' => "Je suis ton PERE"]);
-    }]);
 
 
-    Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
+Route::post('/table/test', ['uses' =>'TableController@testTable'])->middleware('cors');
+
+Route::post('/test/jables', ['middleware' => 'cors', function(Request $request)
+{
+    dump($request);
+    die;
+    return response()->json(['status' => '200', 'message' => "Je suis ton PERE"]);
+}]);
+
+
+
+
+Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
 
 
@@ -90,6 +104,49 @@
 
     Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function() {
 
+        /**
+         * -----------------------------------------------------
+         * Content
+         * -----------------------------------------------------
+         */
+
+
+        Route::get('/contents', ['uses' =>'ContentController@index']);
+
+        Route::post('/content/store', ['uses' =>'ContentController@store']);
+
+        Route::get('/content/{url}/edit', ['uses' =>'ContentController@edit']);
+
+        Route::post('/content/{url}/update', ['uses' =>'ContentController@update']);
+
+        Route::delete('/content/{id}', ['uses' =>'ContentController@destroy'])->where(['id' => '[0-9]+']);
+
+        /**
+         * -----------------------------------------------------
+         * Offers
+         * -----------------------------------------------------
+         */
+
+        Route::get('/offers','OfferController@getAllOffers');
+
+        Route::put('/offers/{id}', 'OfferController@update')->where(['id' => '[0-9]+']);
+
+        Route::post('/offers', 'OfferController@create');
+
+        Route::delete('/offers/{id}','OfferController@delete')->where(['id' => '[0-9]+']);
+
+        /**
+         * -----------------------------------------------------
+         * Orders
+         * -----------------------------------------------------
+         */
+
+        Route::get('/orders','OrderController@getAllOrders');
+
+        Route::get('/orders/{id}','OrderController@show')->where(['id' => '[0-9]+']);;
+
+        Route::get('/orders/{id}/download','OrderController@downloadInvoice')->where(['id' => '[0-9]+']);
+
     });
 
     Route::group(['middleware' => ['customer'], 'prefix' => 'customer'], function() {
@@ -100,27 +157,6 @@
         ]]);
 
     });
-
-
-    /**
-     * -----------------------------------------------------
-     * Content
-     * -----------------------------------------------------
-     */
-
-
-    Route::get('/contents', ['uses' =>'ContentController@index']);
-
-    Route::post('/content/store', ['uses' =>'ContentController@store']);
-
-    Route::get('/content/{url}/edit', ['uses' =>'ContentController@edit']);
-
-    Route::post('/content/{url}/update', ['uses' =>'ContentController@update']);
-
-    Route::delete('/content/{id}', ['uses' =>'ContentController@destroy'])->where(['id' => '[0-9]+']);
-
-
-
 
 
     /**
@@ -138,21 +174,9 @@
 
     /**
      * -----------------------------------------------------
-     * Account validation
-     * -----------------------------------------------------
-     */
-
-    Route::post('/validation/{token}', ['uses' => 'UsersController@validateUserAccount', 'as' => 'userValidation']);
-
-    Route::get('/send/{id}', ['uses' =>'EmailController@sendEmailReminder', 'as'=>'reminderEmail']);
-
-
-    /**
-     * -----------------------------------------------------
      * Subscription
      * -----------------------------------------------------
      */
-    Route::get('/subscriptions', 'SubscriptionController@getAllOrders');
 
     Route::get('/subscription', 'SubscriptionController@getOrder');
 
@@ -178,36 +202,7 @@
     Route::get('/payment/{id}/{mode?}','PaymentController@generateForm')->where(['id' => '[0-9]+']);
 
 
-    /**
-     * -----------------------------------------------------
-     * Offers
-     * -----------------------------------------------------
-     */
-
-    Route::put('/offers/{id}', 'OfferController@update')->where(['id' => '[0-9]+']);
-
-    Route::post('/offers', 'OfferController@create');
-
-    Route::delete('/offers/{id}','OfferController@delete')->where(['id' => '[0-9]+']);
-
-
-
-
-        /**
-         * -----------------------------------------------------
-         * Orders
-         * -----------------------------------------------------
-         */
-
-
-
-        Route::get('/orders','OrderController@index');
-
-        Route::get('/orders/{id}','OrderController@show')->where(['id' => '[0-9]+']);;
-
-        Route::get('/orders/download/{id}','OrderController@download')->where(['id' => '[0-9]+']);;
-
-    });
+});
 
 /**
  * Own user Table Management

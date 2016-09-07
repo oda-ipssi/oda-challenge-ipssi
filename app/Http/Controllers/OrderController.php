@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 
+use App\Http\Services\Helper;
+
 use App\Http\Requests;
 use App\Models\Order;
 use App\Models\User;
@@ -16,121 +18,73 @@ use App;
 
 class OrderController extends Controller
 {
-     
-	 private $status = 200;
-    private $message = 'OK';
-
-
-     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+    /**
+     * @var App\Http\Services\Helper $helper
      */
-    public function index()
+    private $helper;
+
+    /**
+     * OrderController constructor.
+     * @param App\Http\Services\Helper $helper
+     */
+    public function __construct(App\Http\Services\Helper $helper)
     {
-      
-        // get all the contents
+        $this->helper = $helper;
+    }
+
+
+    /**
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function getAllOrders()
+    {
         $orders = Order::all();
 
         if(!$orders){
-        	$this->status = 404;
-        	$this->message = 'Not found';
-
+            return $this->helper->createResponse([], 400, trans('order.get.notfound', [], 'order'));
+        } else {
+            return $this->helper->createResponse(['orders'=> $orders], 200, trans('order.get.success', [], 'order'));
         }
-
-        return response()->json(['status' => $this->status, 'data' => $orders , 'message' => $this->message]);  
-
-    }
-
-     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-      
-        // get all the contents
-        $order = Order::FindOrFail($id);
-
-        if(!$order){
-            $this->status = 404;
-            $this->message = 'Not found';
-
-        }else{
-            $user = User::where('id', $order->user_id)->get();
-            //dd($user);
-        }
-
-
-        return response()->json(['status' => $this->status, 'data' => ['order' => $order, 'user'  => $user ] , 'message' => $this->message]);  
 
     }
 
     /**
-    * Download invoice
-    * @param
-    *
-    */
-    public function download($id) {
-        
-        
-        $order = Order::find($id);
-        $offer = Offer::find($order->offer_id);
-        $payment = Payment::where('order_id', $order->id)->first();
-        //dd($payment);
-        $user = User::where('id', $order->user_id)->first();
+     * @param $idOrder
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function show($idOrder)
+    {
+        $order = Order::FindOrFail($idOrder);
 
-        $html = '
-            <html>
-                <head>
-                    <meta charset="UTF-8">
-                    <meta http-equiv="Content-Type" content="text/html;/>
-                </head>
-
-                <body>
-                    <h1>Invoice #'.$payment->id.'</h1>
-                    <h2>Payment information</h2>
-                    <p>Payment method : '.$payment->paymentMethod.'</p>
-                    <p>Card number : '.$payment->cardNumber.'</p>
-                    <p>Expiration date : '.$payment->expirationDate.'</p>
-
-                    <h2>Billing details</h2>
-                    <p><b>'.$user->lastname.' '.$user->firstname.':</b></p>
-                    <p>'.$user->address.'</p>
-                    <p>'.$user->zipcode.'</p>
-                    <p>'.$user->city.'</p>
-                    <p>'.$user->phone.'</p>
-
-                    <h2>Order summary</h2>
-                    <table width="200"  align="left">
-                        <tr>
-                            <th>Offer</th>
-                            <th>Database limit</th>
-                            <th>Price</th>
-                        </tr>
-
-                        <tr>
-                            <td>'.$offer->title.'</td>
-                            <td>'.$offer->database_limit.'</td>
-                            <td>'.$offer->price.'€</td>
-                        </tr>
-                    </table>
-                </body>
-            <html>';
-        
-        $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML($html)->save('invoice.pdf');
-
-
-        if(!$payment) {
-            $this->status = 404;
-            $this->message = 'Not found';
-        } else {
-            $this->status = 200;
-            $this->message = 'Request completed';
+        if(!$order){
+            return $this->helper->createResponse([], 400, trans('order.get.notfound', [], 'order'));
+        }else{
+            return $this->helper->createResponse($order, 200, trans('order.get.success', [], 'order'));
         }
-        return  response()->json($pdf->stream(), 200, ['Response Ok']);
+    }
+
+    /**
+     * @param $idOrder
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public function downloadInvoice($idOrder) {
+        
+        
+        $order = Order::findOrFail($idOrder);
+        $offer = Offer::findOrFail($order->offer_id);
+        $payment = Payment::where('order_id', $order->id)->first();
+        $user = User::findOrFail($order->user_id);
+
+
+        $view = view ('invoice/subscription',  ['user' => $user, 'offer' => $offer, 'payment' => $payment]);
+        $html = $view->render();
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML($html)->save($this->helper->generatePdfName($user, $payment));
+
+        return $this->helper->createResponse($html, 200, trans('order.invoice.success', [], 'order'));
 
     }
     
