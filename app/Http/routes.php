@@ -65,8 +65,7 @@ Route::get('/content/{url}', ['uses' =>'ContentController@show']);
 
 Route::get('/offers','OfferController@getAllOffers');
 
-    Route::get('/offers/{id}','OfferController@show')->where(['id' => '[0-9]+']);
-
+Route::get('/offers/{id}','OfferController@show')->where(['id' => '[0-9]+']);
 
 
 Route::post('/table/test', ['uses' =>'TableController@testTable'])->middleware('cors');
@@ -110,7 +109,6 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
          * -----------------------------------------------------
          */
 
-
         Route::get('/contents', ['uses' =>'ContentController@index']);
 
         Route::post('/content/store', ['uses' =>'ContentController@store']);
@@ -146,6 +144,29 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
         Route::get('/orders/{id}','OrderController@show')->where(['id' => '[0-9]+']);;
 
         Route::get('/orders/{id}/download','OrderController@downloadInvoice')->where(['id' => '[0-9]+']);
+
+
+        /**
+         * -----------------------------------------------------
+         * Dashboard
+         * -----------------------------------------------------
+         */
+
+        Route::get('dashboard/users', 'DashboardController@getAllUsersNumber')->name('dashboard_users');
+
+        Route::get('dashboard/active-users', 'DashboardController@getActiveUsersNumber')->name('dashboard_active_users');
+
+        Route::get('dashboard/valid-orders', 'DashboardController@getValidOrdersNumber')->name('dashboard_valid_order');
+
+        Route::get('dashboard/valid-orders/sum', 'DashboardController@getValidOrdersSum')->name('dashboard_valid_order_sum');
+
+        Route::get('dashboard/databases', 'DashboardController@getDatabasesNumber')->name('dashboard_databases');
+
+        Route::get('dashboard/email', 'DashboardController@getEmailFromActiveUsers')->name('dashboard_email_active_users');
+
+        Route::get('dashboard/messages', 'DashboardController@getContactMessages')->name('dashboard_contact_messages');
+
+
 
     });
 
