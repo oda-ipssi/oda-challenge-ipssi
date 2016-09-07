@@ -45,25 +45,19 @@ class DashboardController extends Controller
 
 
     public function getAllUsersNumber() {
-
-        // todo implement
-
+        return $this->helper->createResponse($this->userRepository->getAllUsersNumber(),200,'Success');
     }
 
     public function getActiveUsersNumber() {
-
-        // todo implement
+        return $this->helper->createResponse($this->userRepository->getActiveUsersNumber(),200,'Success');
     }
 
     public function getValidOrdersNumber() {
-
-        // todo implement
+        return $this->helper->createResponse($this->orderRepository->getValidOrdersNumber(),200,'Success');
     }
 
     public function getValidOrdersSum() {
-
-        // todo implement
-
+        return $this->helper->createResponse($this->orderRepository->getValidOrdersSum(),200,'Success');
     }
 
     public function getDatabasesNumber() {
