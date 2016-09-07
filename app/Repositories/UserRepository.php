@@ -74,4 +74,13 @@ class UserRepository
         return $user;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getEmailFromActiveUsers() {
+
+        return DB::table('users')->where('is_active', true)->get();
+
+    }
+
 }
