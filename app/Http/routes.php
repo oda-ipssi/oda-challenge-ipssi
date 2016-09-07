@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * ----------------------------------------------------------------------------------------------------
  *
@@ -13,61 +12,61 @@
  * ----------------------------------------------------------------------------------------------------
  */
 
-/**
- * -----------------------------------------------------
- * Home
- * -----------------------------------------------------
- */
+    /**
+     * -----------------------------------------------------
+     * Home
+     * -----------------------------------------------------
+     */
 
-Route::get('/', 'IndexController@index');
+    Route::get('/', 'IndexController@index');
 
-Route::get('/home', 'HomeController@index');
+    Route::get('/home', 'HomeController@index');
 
-/**
- * -----------------------------------------------------
- * Sign in
- * -----------------------------------------------------
- */
+    /**
+     * -----------------------------------------------------
+     * Sign in
+     * -----------------------------------------------------
+     */
 
-Route::post('/sign-in', 'AuthenticateController@authenticate');
+    Route::post('/sign-in', 'AuthenticateController@authenticate');
 
-/**
- * -----------------------------------------------------
- * Registration
- * -----------------------------------------------------
- */
+    /**
+     * -----------------------------------------------------
+     * Registration
+     * -----------------------------------------------------
+     */
 
-Route::post('/registration', ['uses' => 'UsersController@createUser'])->name('registration');
+    Route::post('/registration', ['uses' => 'UsersController@createUser'])->name('registration');
 
-/**
- * -----------------------------------------------------
- * Content
- * -----------------------------------------------------
- */
+    /**
+     * -----------------------------------------------------
+     * Content
+     * -----------------------------------------------------
+     */
 
-Route::get('/content/{url}', ['uses' =>'ContentController@show']);
-
-
-/**
- * -----------------------------------------------------
- * Offers
- * -----------------------------------------------------
- */
-
-Route::get('/offers','OfferController@getAllOffers');
+    Route::get('/content/{url}', ['uses' =>'ContentController@show']);
 
 
-Route::post('/table/test', ['uses' =>'TableController@testTable'])->middleware('cors');
+    /**
+     * -----------------------------------------------------
+     * Offers
+     * -----------------------------------------------------
+     */
 
-Route::post('/test/jables', ['middleware' => 'cors', function(Request $request)
-{
-    dump($request);
-    die;
-    return response()->json(['status' => '200', 'message' => "Je suis ton PERE"]);
-}]);
+    Route::get('/offers','OfferController@getAllOffers');
 
 
-Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
+    Route::post('/table/test', ['uses' =>'TableController@testTable'])->middleware('cors');
+
+    Route::post('/test/jables', ['middleware' => 'cors', function(Request $request)
+    {
+        dump($request);
+        die;
+        return response()->json(['status' => '200', 'message' => "Je suis ton PERE"]);
+    }]);
+
+
+    Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
 
 
