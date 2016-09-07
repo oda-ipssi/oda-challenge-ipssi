@@ -192,7 +192,22 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
 
 
-});
+
+        /**
+         * -----------------------------------------------------
+         * Orders
+         * -----------------------------------------------------
+         */
+
+
+
+        Route::get('/orders','OrderController@index');
+
+        Route::get('/orders/{id}','OrderController@show')->where(['id' => '[0-9]+']);;
+
+        Route::get('/orders/download/{id}','OrderController@download')->where(['id' => '[0-9]+']);;
+
+    });
 
 /**
  * Own user Table Management
