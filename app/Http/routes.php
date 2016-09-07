@@ -57,18 +57,10 @@ Route::get('/content/{url}', ['uses' =>'ContentController@show']);
 Route::get('/offers','OfferController@getAllOffers');
 
 
-Route::post('/table/test', ['uses' =>'TableController@testTable'])->middleware('cors');
-
-Route::post('/test/jables', ['middleware' => 'cors', function(Request $request)
-{
-    dump($request);
-    die;
-    return response()->json(['status' => '200', 'message' => "Je suis ton PERE"]);
-}]);
+Route::post('/table/test', ['uses' =>'TableController@testTable']);
 
 
 Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
-
 
 
     /**
@@ -194,9 +186,8 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
 });
 
-/**
- * Own user Table Management
- *
- */
-Route::get('/table', ['uses' =>'TableController@storeTable']);
+Route::post('/create/table', ['uses' =>'TableController@storeTable']);
+
+Route::get('/up/table', ['uses' =>'TableController@populateTable']);
+
 
