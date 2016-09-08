@@ -69,7 +69,8 @@ class TableController extends Controller
 
     public function getDataForChoosenTable(Request $request)
     {
-        $tableName = "jables";
+        $requestData = json_decode($request->getContent());
+        $tableName = $requestData->data->tableName;
         $tableData = DB::table($tableName)->get();
 
         return response()->json(['status' => '200', 'data' => $tableData , 'message' => 'All your data from '.$tableName]);
