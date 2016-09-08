@@ -20,6 +20,7 @@ class PayzenManager{
         $this->defaultSettings["vads_trans_date"] = date("YmdHis");
         $this->defaultSettings["vads_url_success"] = 'http://localhost:9000/#/tarif';
         $this->defaultSettings["vads_url_error"] = 'http://localhost:9000/#/';
+        $this->defaultSettings["vads_url_return"] = 'http://localhost:8000/validate';
     }
     /*--------------------------------------------------------------------------------------------------------------------
    ----------------------------------------------------------------------------------------------------------------------

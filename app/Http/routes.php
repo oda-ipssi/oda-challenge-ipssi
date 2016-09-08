@@ -226,9 +226,9 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
     Route::get('/checkout/{id}','PaymentController@generateForm')->where(['id' => '[0-9]+'])->name('checkout');
 
-
-
 });
+
+Route::post('/validate', 'SubscriptionController@validatePayment');
 
 
 

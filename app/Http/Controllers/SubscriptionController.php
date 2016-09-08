@@ -134,6 +134,15 @@ class SubscriptionController extends Controller
         }
     }
 
+    public function validatePayment(Request $request){
+        $myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
+        $txt = "John Doe\n";
+        fwrite($myfile, $txt);
+        $txt = "Jane Doe\n";
+        fwrite($myfile, $txt);
+        fclose($myfile);
+    }
+
     /**
      * @param $orderId
      * @return \Illuminate\Http\JsonResponse
@@ -157,8 +166,10 @@ class SubscriptionController extends Controller
         //to modify to get data
         $offerId = $request->get('offerId');
 
+        $offer = Offer::findOrFail($offerId);
+
         if($order->offer_id != $offerId && $userId == $user->id){
-            $response = $this->subscriptionFactory($offerId,$order);
+            $response = $this->updateSubscription($order,$user,$offer);
 
             return $response;
         } else {
