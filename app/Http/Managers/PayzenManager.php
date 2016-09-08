@@ -18,7 +18,6 @@ class PayzenManager{
         $this->defaultSettings['vads_version'] = 'V2';
         $this->defaultSettings['vads_payment_config'] = 'SINGLE';
         $this->defaultSettings["vads_trans_date"] = date("YmdHis");
-        $this->defaultSettings["vads_url_return"] = route('');
     }
     /*--------------------------------------------------------------------------------------------------------------------
    ----------------------------------------------------------------------------------------------------------------------

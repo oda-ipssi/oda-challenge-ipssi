@@ -103,9 +103,14 @@ class SubscriptionController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function subscriptionFactory($offerId, Order $order = null, Request $request) {
+    public function subscriptionFactory(Request $request) {
+
+        $token= $request->all()['token'];
+        $offerId = $request->get('data')['offerId'];
+        $order = isset($request->get('data')['order']) ? $request->get('data')['order'] : null;
 
         $offer = Offer::find($offerId);
+
 
         $user = JWTAuth::parseToken()->authenticate();
 
@@ -119,8 +124,7 @@ class SubscriptionController extends Controller
                     }
                     break;
                 default:
-                    // TODO redirect to payment
-                    return $this->helper->createResponse([], 404, 'REDIRECT TO PAYMENT');
+                    return redirect()->route('checkout', ['id' => $offerId, 'token' => $token ]);
             }
         } else {
             $request->getSession()->set('user-registration-offer', $offerId);
