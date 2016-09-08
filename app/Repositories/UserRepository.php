@@ -130,4 +130,15 @@ class UserRepository
             ])->count();
     }
 
+    public function getUserRole($id)
+    {
+        return DB::table('users')
+            ->select('roles.name')
+            ->join('role_user', 'users.id', '=', 'role_user.user_id')
+            ->join('roles','roles.id', '=', 'role_user.role_id')
+            ->where('users.id', $id)
+            ->first();
+
+    }
+
 }

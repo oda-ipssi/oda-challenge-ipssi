@@ -9,9 +9,12 @@ use App\Repositories\UserRepository;
 use App\Models\User;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Mail;
+use JWTAuth;
 
 class UsersController extends Controller
 {
+
+    const ADMIN_NAME = 'role_admin';
     /**
      * @var UserRepository
      */
@@ -35,10 +38,8 @@ class UsersController extends Controller
 
 
     /**
-     * Display the specified resource.
-     *
-     * @param  UserRequest $userRequest
-     * @return \Illuminate\Http\Response
+     * @param Request $userRequest
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
     public function createUser(Request $userRequest) {
 
@@ -71,6 +72,20 @@ class UsersController extends Controller
 
         }
 
+    }
+
+    /**
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function isAdmin() {
+
+        $user = JWTAuth::parseToken()->authenticate();
+        $role = $this->userRepository->getUserRole($user->id);
+
+        if($role->name == self::ADMIN_NAME) {
+            return $this->helper->createResponse(['is_admin' => true], 200, trans('user.is_admin'));
+        }
+        return $this->helper->createResponse(['is_admin' => false], 200, trans('user.is_not_admin'));
     }
 
 
