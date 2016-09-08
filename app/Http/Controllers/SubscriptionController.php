@@ -146,7 +146,7 @@ class SubscriptionController extends Controller
             }
         }
 
-        header("Location: http://localhost:9000/");
+        header("Location: http://yoda4.it-akademy.com/");
         die();
 
     }

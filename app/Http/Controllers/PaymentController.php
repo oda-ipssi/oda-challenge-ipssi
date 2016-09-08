@@ -55,9 +55,9 @@ class PaymentController extends Controller
 
         //Multiply by 100 to get cents (minimum quanta of money), see PayzenDoc for more details
         $paymentSettings['vads_amount'] = intval($chosenOffer["price"] * 100 * $mutiplier);
-        $paymentSettings["vads_url_success"] = 'http://localhost:8000/validate/'.$user->id.'/'.$offerData->id;
+        $paymentSettings["vads_url_success"] = 'http://api-yoda4.it-akademy.com/validate/'.$user->id.'/'.$offerData->id;
         $paymentSettings["vads_url_error"] = 'http://localhost:9000/#/';
-        $paymentSettings["vads_url_return"] = 'http://localhost:8000/validate/'.$user->id;
+        $paymentSettings["vads_url_return"] = 'http://api-yoda4.it-akademy.com/validate/'.$user->id;
         $paymentSettings["vads_return_mode"] = 'GET';
 
         // Retieving all data to complete the form in order to make the payment
