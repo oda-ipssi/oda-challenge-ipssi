@@ -190,4 +190,8 @@ Route::post('/create/table', ['uses' =>'TableController@storeTable']);
 
 Route::get('/up/table', ['uses' =>'TableController@populateTable']);
 
+Route::get('/get/user-table', ['uses' =>'TableController@getDataTable']);
+
+Route::get('/get-data/user-table', ['uses' =>'TableController@getDataForChoosenTable']);
+
 

@@ -59,7 +59,6 @@ class TableManager
      */
     private function loadData($data)
     {
-        /*Method to load data*/
         return $this->data = $data;
 
     }
@@ -68,7 +67,7 @@ class TableManager
     /**
      * @return path
      */
-    public function saveData()
+    public function saveSchema($originalData = null)
     {
         if(!is_dir(database_path()."/jables/")){
             mkdir(database_path()."/jables/",0775);
@@ -82,14 +81,28 @@ class TableManager
             }
         }
         $data["fields"]["id"] = $primaryKey;
+        if(!is_null($originalData)){
+            $finalData['fields'] = array_merge($data['fields'],$originalData['fields']);
+        }
+        else{
+            $finalData = $data;
+        }
         if(file_exists(database_path()."/jables/".$this->tableName.".json")){
             unlink(realpath(database_path()."/jables/".$this->tableName.".json"));
         }
-        if (file_put_contents(database_path()."/jables/".$this->tableName.".json", json_encode($data))) {
+        if (file_put_contents(database_path()."/jables/".$this->tableName.".json", json_encode($finalData))) {
             return true;
         } else {
             return false;
         }
 
+    }
+
+
+    public function saveData($table,$data){
+        $db = DB::table($table);
+        $db->insert(
+           $data
+        );
     }
 }

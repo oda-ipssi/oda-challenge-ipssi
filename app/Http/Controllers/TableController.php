@@ -35,29 +35,44 @@ class TableController extends Controller
 
         $dataArray = json_decode($request->getContent());
         $data = json_encode($dataArray);
-        // $name = $data->tableName;
-        $name = 'ourTest';
+        $name = $dataArray->data->tableName ."_ODA";
         $this->table = TableManager::getInstance($name, $data);
         if (Schema::hasTable($this->table->tableName)) {
-            $this->table->saveData();
+            $originalData = json_decode(file_get_contents(database_path()."/jables/".$this->table->tableName.".json"),true);
+            $this->table->saveSchema($originalData);
             \Illuminate\Support\Facades\Artisan::call('jables:refresh');
             return response()->json(['status' => '200', 'message' => "Your table has been updated or refresh, See Ya ;)" .$this->table->tableName]);
         } else {
             // return save data
-            $this->table->saveData();
-            \Illuminate\Support\Facades\Artisan::call('jables');
+            $this->table->saveSchema();
+            \Illuminate\Support\Facades\Artisan::call('jables:refresh');
             return response()->json(['status' => $this->status, 'data' => TableManager::getInstance($name, $data) , 'message' => 'Table created !']);
         }
     }
 
     /**
      * @param Request $request
-     * @param User $user
+     * @return JsonResponse
      */
-    public function getDataTable(Request $request, User $user)
+    public function getDataTable(Request $request /*, User $user*/)
     {
-        // $userTables =
-        // return response()->json(['status' => $this->status_create, 'data' => $content , 'message' => $this->message_create]);
+        $tables = DB::table("pg_tables")->where("schemaname","oda")->where("tablename","LIKE", "%ODA")->select('tablename')->get();
+
+        $data['tableName'] = [];
+        foreach ($tables as $elem) {
+            array_push($data['tableName'], $elem->tablename);
+        }
+
+        return response()->json(['status' => '200', 'data' => $tables , 'message' => 'OK']);
+    }
+
+
+    public function getDataForChoosenTable(Request $request)
+    {
+        $tableName = "jables";
+        $tableData = DB::table($tableName)->get();
+;
+        return response()->json(['status' => '200', 'data' => $tableData , 'message' => 'All your data from '.$tableName]);
     }
 
     /**
@@ -67,14 +82,11 @@ class TableController extends Controller
     public function populateTable(Request $request)
     {
         // Insert some stuff
-        $table = DB::table('ourTest');
-        $table->insert(
-            array(
-                'test4' => 1,
-                'test5' => 2
-            )
-        );
+        $db = DB::table("ourTest");
+        $db->insert(
+            array('test4' => 45,'test5' => 90)
 
+        );
         return response()->json(['status' => '200', 'message' => "You have registered data in your table" ]);
     }
 
