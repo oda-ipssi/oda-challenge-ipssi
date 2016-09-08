@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Role;
 use App\Http\Requests\UserRequest;
 use App\Http\Services\Helper;
+use JWTAuth;
 
 class AssociateController extends Controller
 {
@@ -39,41 +40,24 @@ class AssociateController extends Controller
 
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param UserRequest $userRequest
+     * @param AssociateRepository $associate_gestion
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
     public function store(UserRequest $userRequest, AssociateRepository $associate_gestion)
     {
-          $idUser = 2;
-          $newUser = $associate_gestion->store($userRequest->get('data'), $idUser);
-          $newUser->save();
+        $user = JWTAuth::parseToken()->authenticate();
 
-          $roleUndercustomer = Role::where('name', 'role_undercustomer')->first();
+        $newUser = $associate_gestion->store($userRequest->get('data'), $user->id);
+        $newUser->save();
 
-          $newUser->attachRole($roleUndercustomer);
+        $roleUndercustomer = Role::where('name', 'role_undercustomer')->first();
 
-          /* TODO TEST WITH THE MAIL SERVER CONFIGURED */
-          // $url = route('userValidation', ['token' => $newUser->validation_token]);
-          //$this->helper->sendMail($newUser, 'noreply@oda.com', trans('user.register.validation', [], 'user'), 'emails.validation', ['url' => $url]);
+        $newUser->attachRole($roleUndercustomer);
 
-          return $this->helper->createResponse($newUser, 200, trans("user.response.success", [], 'user'));
+        return $this->helper->createResponse($newUser, 200, trans("user.response.success", [], 'user'));
 
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    // public function update(AssociateRequest $request, $id)
-    // {
-    //     $this->AssociateRepository->update($request->all(), $id);
-    //
-    // }
 
     /**
      * Remove the specified resource from storage.

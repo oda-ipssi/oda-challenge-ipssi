@@ -44,7 +44,7 @@ class AccountController extends Controller
      */
     public function show($id)
     {
-
+        $this->helper->checkUser($id);
         try{
             $user = User::findOrFail($id);
             return $this->helper->createResponse($user, 200, trans("user.response.ok", [], 'user'));
@@ -65,9 +65,7 @@ class AccountController extends Controller
      */
     public function update($id, UserRequest $userRequest)
     {
-
         $this->helper->checkUser($id);
-
         try{
             $accountUser = $this->userRepository->editUserInformation($userRequest->get('data'), User::findOrFail($id));
             $accountUser->save();
@@ -84,7 +82,10 @@ class AccountController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    public function editPassword($id, Request $request) {
+    public function editPassword($id, Request $request)
+    {
+
+        $this->helper->checkUser($id);
 
         $password = $request->get('data')['password'];
         $newPassword = $request->get('data')['new_password'];
@@ -98,7 +99,7 @@ class AccountController extends Controller
         ]);
 
         /** @var \Illuminate\Validation\Validator $passwordValidated */
-        if($passwordValidated->passes()) {
+        if ($passwordValidated->passes()) {
 
             if ($bcryptHasher->check($password, $user->password)) {
                 $newPasswordValidated = Validator::make($request->all(), [
@@ -106,7 +107,7 @@ class AccountController extends Controller
                 ]);
                 /** @var \Illuminate\Validation\Validator $newPasswordValidated */
                 if ($newPasswordValidated->passes()) {
-                    $user = $this->userRepository->editUserPassword($newPassword,$user);
+                    $user = $this->userRepository->editUserPassword($newPassword, $user);
                     $user->save();
                     return $this->helper->createResponse($user, 200, trans('user.edit.success', [], 'user'));
                 }
@@ -119,5 +120,6 @@ class AccountController extends Controller
             return $this->helper->createResponse("", 422, trans('user.response.error', [], 'user'));
         }
     }
+
 
 }
