@@ -11,6 +11,8 @@ namespace App\Http\Controllers;
 use App\Http\Managers\PayzenManager;
 use App\Models\Offer;
 use Exception;
+use JWTAuth;
+
 
 class PaymentController extends Controller
 {
@@ -21,25 +23,11 @@ class PaymentController extends Controller
         $this->payzen = new PayzenManager();
     }
 
-    public function index(){
-        //Temporary view waiting for Angular handling to be merged
-        $offers = $this->payzen->getOffers();
-        for($i = 0; $i <= 1; $i++) {
-            foreach ($offers as $offer) {
-                echo '<a href="/payment/' . $offer['id'];
-                if( $i == 1){
-                    echo '/annual';
-                }
-                echo '" >';
-                echo "Offre ";
-                if( $i == 1){
-                    echo 'annuelle ';
-                }
-                echo " {$offer['id']} : {$offer['title']} --- {$offer['description']}";
-                echo '</a><br /><br />';
-            }
-            echo "<br /><br />";
-        }
+    public function index($id_offer){
+        $token = JWTAuth::getToken();
+        dd($token);
+
+        return redirect()->route('payment',['id' => $id_offer, '/?token=' => $token ]);
     }
 
     public function generateForm($id,$mode = null){

@@ -18,6 +18,7 @@ class PayzenManager{
         $this->defaultSettings['vads_version'] = 'V2';
         $this->defaultSettings['vads_payment_config'] = 'SINGLE';
         $this->defaultSettings["vads_trans_date"] = date("YmdHis");
+        $this->defaultSettings["vads_url_return"] = route('');
     }
     /*--------------------------------------------------------------------------------------------------------------------
    ----------------------------------------------------------------------------------------------------------------------
@@ -41,5 +42,9 @@ class PayzenManager{
 
     public function getOffers(){
         return \App\Models\Offer::all()->toArray();
+    }
+
+    public function getOffer($id_offer){
+        return \App\Models\Offer::findOrFail($id_offer)->toArray();
     }
 }

@@ -19,6 +19,7 @@ class OrderRepository
     public function editOrder(Order $order, Offer $offer) {
 
         $order->offer_id = $offer->id;
+        $order->price = $offer->price;
         $order->updated_at = Carbon::now()->format('Y-m-d H:i:s');
 
         return $order;
