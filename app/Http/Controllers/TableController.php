@@ -12,6 +12,8 @@ use App\Models\User;
 use App\Http\Requests\UserRequest;
 
 use Schema;
+use Illuminate\Support\Facades\DB;
+// use DB;
 
 use App\Http\Requests;
 
@@ -19,73 +21,77 @@ class TableController extends Controller
 {
 
     private $status = 200;
-    private $message = 'OK';
-    private $table = null;
+    private $table;
 
     /**
-     * Store a new table in database following json returns by front.
-     *
-     * @return \Illuminate\Http\Response
+     * @description Store a new table in database following json returns by front or Update/refresh one already exist
+     * @param Request $request
+     * @return JsonResponse
      */
     public function storeTable(Request $request)
     {
-        // $user = User::where('validation_token', $token)->first(); find the user by right parameter
         // $user = JWTAuth::parseToken()->authenticate(); // get current user
-        $this->table = TableManager::getInstance("food");
-        if (Schema::hasTable($this->table->tableName)) {
-            // return update in fact
-            // $this->updateTable($request, User $user, $this->table);
-            return response()->json(['status' => '200', 'message' => "You have already a table named " .$this->table->tableName]);
-        } else {
-            // return save data
-            $this->table->saveData();
-            \Illuminate\Support\Facades\Artisan::call('jables');
-            return response()->json(['status' => $this->status, 'data' => TableManager::getInstance($userId) , 'message' => $this->message]);
-        }
-    }
+        // $userId = $user->id;
 
-    /**
-     * Store a new table in database following json returns by front.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getDataTable(Request $request, User $user)
-    {
-        if ($user)
-        {
-            if (Schema::hasTable('food')) {
-                return response()->json(['status' => '200', 'message' => "The table already exist, no need to re-import !"]);
-            }
-            return response()->json(['status' => $this->status, 'data' => TableManager::getInstance($userId) , 'message' => $this->message]);
-        }
-
-        return response()->json(['status' => '402', 'message' => "No user logged in"]);
-    }
-
-
-    /**
-     * Update an existing table in database following json returns by front.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function updateTable(Request $request)
-    {
-        $table = "";
-
-        // return response()->json(['status' => $this->status_create, 'data' => $content , 'message' => $this->message_create]);
-    }
-
-    public function testTable(Request $request)
-    {
         $dataArray = json_decode($request->getContent());
         $data = json_encode($dataArray);
-        var_dump($data);
-
-        //if (!$dataArray) {
-            //return response()->json(['status' => '402', 'message' => "Je suis ton PERE"]);
-        //}
-
-        return response()->json(['status' => '200', 'message' => "Je suis ton PERE"]);
+        $name = $dataArray->data->tableName ."_ODA";
+        $this->table = TableManager::getInstance($name, $data);
+        if (Schema::hasTable($this->table->tableName)) {
+            $originalData = json_decode(file_get_contents(database_path()."/jables/".$this->table->tableName.".json"),true);
+            $this->table->saveSchema($originalData);
+            \Illuminate\Support\Facades\Artisan::call('jables:refresh');
+            return response()->json(['status' => '200', 'message' => "Your table has been updated or refresh, See Ya ;)" .$this->table->tableName]);
+        } else {
+            // return save data
+            $this->table->saveSchema();
+            \Illuminate\Support\Facades\Artisan::call('jables:refresh');
+            return response()->json(['status' => $this->status, 'data' => TableManager::getInstance($name, $data) , 'message' => 'Table created !']);
+        }
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getDataTable(Request $request /*, User $user*/)
+    {
+        $tables = DB::table("pg_tables")->where("schemaname","oda")->where("tablename","LIKE", "%ODA")->select('tablename')->get();
+
+        $data['tableName'] = [];
+        foreach ($tables as $elem) {
+            array_push($data['tableName'], $elem->tablename);
+        }
+
+        return response()->json(['status' => '200', 'data' => $tables , 'message' => 'OK']);
+    }
+
+
+    public function getDataForChoosenTable(Request $request)
+    {
+        $requestData = json_decode($request->getContent());
+        $tableName = $requestData->data->tableName;
+        $tableData = DB::table($tableName)->get();
+
+        return response()->json(['status' => '200', 'data' => $tableData , 'message' => 'All your data from '.$tableName]);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function populateTable(Request $request)
+    {
+        // Insert some stuff
+        $db = DB::table("ourTest");
+        $db->insert(
+            array('test4' => 45,'test5' => 90)
+
+        );
+        return response()->json(['status' => '200', 'message' => "You have registered data in your table" ]);
+    }
+
+
 }
+
+
