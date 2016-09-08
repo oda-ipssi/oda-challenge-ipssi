@@ -66,6 +66,7 @@ class AccountController extends Controller
     public function update($id, UserRequest $userRequest)
     {
         $this->helper->checkUser($id);
+
         try{
             $accountUser = $this->userRepository->editUserInformation($userRequest->get('data'), User::findOrFail($id));
             $accountUser->save();

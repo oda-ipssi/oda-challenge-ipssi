@@ -103,6 +103,12 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
     Route::get('test/scan', 'TestController@scanPermissions');
 
+    /**
+     * -----------------------------------------------------
+     * Check if current user is an admin
+     * -----------------------------------------------------
+     */
+    Route::get('is-admin', 'UsersController@isAdmin');
 
     /**
      * -----------------------------------------------------

@@ -11,6 +11,8 @@ return [
     |
     */
 
+    'is_admin' => "Cet utilisateur est un administrateur",
+    "is_not_admin" => "Cet utilisateur n'est pas un administrateur",
     'edit' => [
         'success' => "L'utilisateur a bien été modifié.",
         'error' => "L'utilisateur n'a pas pu être modifié."

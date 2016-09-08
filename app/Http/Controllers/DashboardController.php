@@ -52,8 +52,9 @@ class DashboardController extends Controller
         $this->helper = $helper;
     }
 
-
-
+    /**
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function getActiveUsersNumber() {
 
         $activeUsersNumber = $this->userRepository->getActiveUsersNumber();
@@ -65,6 +66,9 @@ class DashboardController extends Controller
         return $this->helper->createResponse(['number' => $activeUsersNumber, 'total_admin' => $activeAdminNumber, 'total_customer' => $activeCustomerNumber, 'total_registered' => $activeRegisteredNumber],200,'Success');
     }
 
+    /**
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function getValidOrdersNumber() {
 
         $validOrdersNumber = $this->orderRepository->getValidOrdersNumber();
@@ -88,7 +92,6 @@ class DashboardController extends Controller
                 'sum_sub3' => $validOrdersSumSub3
             ],200,'Success');
     }
-
 
     /**
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
