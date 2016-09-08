@@ -10,7 +10,9 @@ namespace App\Http\Services;
 
 
 use App\Models\User;
+use Illuminate\Contracts\Validation\UnauthorizedException;
 use Illuminate\Support\Facades\Mail;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 
 class Helper
@@ -54,6 +56,16 @@ class Helper
 
         return 'invoice_'.$user->username.'_'.$user->id.'_'.substr($payment->created_at,0, 10).'.pdf';
 
+    }
+
+    /**
+     * @param $idUser
+     */
+    public function checkUser($idUser) {
+        $user = JWTAuth::parseToken()->authenticate();
+        if($user->id != $idUser) {
+            throw new UnauthorizedException;
+        }
     }
 
 

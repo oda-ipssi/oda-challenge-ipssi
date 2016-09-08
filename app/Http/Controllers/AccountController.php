@@ -44,8 +44,8 @@ class AccountController extends Controller
      */
     public function show($id)
     {
-        try{
 
+        try{
             $user = User::findOrFail($id);
             return $this->helper->createResponse($user, 200, trans("user.response.ok", [], 'user'));
 
@@ -57,6 +57,7 @@ class AccountController extends Controller
 
     }
 
+
     /**
      * @param $id
      * @param UserRequest $userRequest
@@ -65,19 +66,15 @@ class AccountController extends Controller
     public function update($id, UserRequest $userRequest)
     {
 
+        $this->helper->checkUser($id);
+
         try{
-
             $accountUser = $this->userRepository->editUserInformation($userRequest->get('data'), User::findOrFail($id));
-
             $accountUser->save();
-
-
             return $this->helper->createResponse($accountUser, 200, trans('user.edit.success'));
 
         } catch (ModelNotFoundException $e) {
-
             return $this->helper->createResponse("", 404, trans('user.response.notfound'));
-
         }
 
     }
