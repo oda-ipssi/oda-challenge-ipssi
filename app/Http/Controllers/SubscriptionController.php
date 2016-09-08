@@ -103,7 +103,10 @@ class SubscriptionController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function subscriptionFactory($offerId, Order $order = null, Request $request) {
+    public function subscriptionFactory(Request $request) {
+
+        $offerId = $request->get('data')['offerId'];
+        $order = isset($request->get('data')['order']) ? $request->get('data')['order'] : null;
 
         $offer = Offer::find($offerId);
 
