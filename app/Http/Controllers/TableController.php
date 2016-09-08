@@ -30,22 +30,24 @@ class TableController extends Controller
      */
     public function storeTable(Request $request)
     {
-        // $user = JWTAuth::parseToken()->authenticate(); // get current user
-        // $userId = $user->id;
+        $user = JWTAuth::parseToken()->authenticate();
 
         $dataArray = json_decode($request->getContent());
         $data = json_encode($dataArray);
-        $name = $dataArray->data->tableName ."_ODA";
+        $name = $dataArray->data->tableName ."_ODA_".$user->id;
         $this->table = TableManager::getInstance($name, $data);
+
         if (Schema::hasTable($this->table->tableName)) {
             $originalData = json_decode(file_get_contents(database_path()."/jables/".$this->table->tableName.".json"),true);
             $this->table->saveSchema($originalData);
             \Illuminate\Support\Facades\Artisan::call('jables:refresh');
+
             return response()->json(['status' => '200', 'message' => "Your table has been updated or refresh, See Ya ;)" .$this->table->tableName]);
         } else {
             // return save data
             $this->table->saveSchema();
             \Illuminate\Support\Facades\Artisan::call('jables:refresh');
+
             return response()->json(['status' => $this->status, 'data' => TableManager::getInstance($name, $data) , 'message' => 'Table created !']);
         }
     }
@@ -54,9 +56,12 @@ class TableController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function getDataTable(Request $request /*, User $user*/)
+    public function getDataTable(Request $request)
     {
-        $tables = DB::table("pg_tables")->where("schemaname","oda")->where("tablename","LIKE", "%ODA")->select('tablename')->get();
+
+        $user = JWTAuth::parseToken()->authenticate();
+
+        $tables = DB::table("pg_tables")->where("schemaname","oda")->where("tablename","LIKE", "%".$user->id)->select('tablename')->get();
 
         $data['tableName'] = [];
         foreach ($tables as $elem) {

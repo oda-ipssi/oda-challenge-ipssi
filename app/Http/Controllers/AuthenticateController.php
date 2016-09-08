@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use JWTAuth;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+
 class AuthenticateController extends Controller
 {
 
@@ -60,11 +62,20 @@ class AuthenticateController extends Controller
      */
     public function logOut(Request $request) {
 
-        if(JWTAuth::invalidate(JWTAuth::getToken()) === true) {
-         return $this->helper->createResponse([], 200, 'logout.ok');
-        } else {
-            return $this->helper->createResponse([], 422, 'logout.not.ok');
+        try {
+            if(JWTAuth::invalidate(JWTAuth::getToken()) === true) {
+                return $this->helper->createResponse([], 200, 'logout.ok');
+            }
+
+        } catch (TokenExpiredException $e) {
+            $user = User::first();
+            $token = JWTAuth::fromUser($user);
+            if(JWTAuth::invalidate($token) === true) {
+                return $this->helper->createResponse([], 200, 'logout.ok');
+            }
         }
+
+        return $this->helper->createResponse([], 422, 'logout.not.ok');
 
     }
 
