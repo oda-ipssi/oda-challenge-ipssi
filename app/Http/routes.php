@@ -92,26 +92,10 @@ Route::post('/table/test', ['uses' =>'TableController@testTable']);
  */
 Route::post('/table/test', ['uses' =>'TableController@testTable'])->middleware('cors');
 
-Route::post('/test/jables', ['middleware' => 'cors', function(Request $request)
-{
-    dump($request);
-    die;
-    return response()->json(['status' => '200', 'message' => "Je suis ton PERE"]);
-}]);
-
+Route::post('/test/jables', ['middleware' => 'cors']);
 
 Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
-
-    /**
-     * -----------------------------------------------------
-     * Test
-     * -----------------------------------------------------
-     */
-
-    Route::get('test', 'TestController@index');
-
-    Route::get('test/scan', 'TestController@scanPermissions');
 
     /**
      * -----------------------------------------------------
@@ -199,7 +183,6 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
     });
 
-
     /**
      * -----------------------------------------------------
      * Account
@@ -241,19 +224,27 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
     Route::get('/checkout/{id}','PaymentController@generateForm')->where(['id' => '[0-9]+'])->name('checkout');
 
+    /**
+     * -----------------------------------------------------
+     * MVP
+     * -----------------------------------------------------
+     */
+    Route::post('/create/table', ['uses' =>'TableController@storeTable']);
+
+    Route::post('/up/table', ['uses' =>'TableController@populateTable']);
+
+    Route::post('/get/user-table', ['uses' =>'TableController@getDataTable']);
+
+    Route::post('/get-data/user-table', ['uses' =>'TableController@getDataForChoosenTable']);
+
 });
 
+/**
+ * -----------------------------------------------------
+ * Payment Validation
+ * -----------------------------------------------------
+ */
 Route::post('/validate', 'SubscriptionController@validatePayment');
 
-
-
-
-Route::post('/create/table', ['uses' =>'TableController@storeTable']);
-
-Route::get('/up/table', ['uses' =>'TableController@populateTable']);
-
-Route::get('/get/user-table', ['uses' =>'TableController@getDataTable']);
-
-Route::get('/get-data/user-table', ['uses' =>'TableController@getDataForChoosenTable']);
 
 
