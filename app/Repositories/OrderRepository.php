@@ -20,6 +20,7 @@ class OrderRepository
 
         $order->offer_id = $offer->id;
         $order->price = $offer->price;
+        $order->status = Order::STATUS_OK;
         $order->updated_at = Carbon::now()->format('Y-m-d H:i:s');
 
         return $order;
