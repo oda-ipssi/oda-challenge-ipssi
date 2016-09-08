@@ -71,7 +71,7 @@ class TableController extends Controller
     {
         $tableName = "jables";
         $tableData = DB::table($tableName)->get();
-;
+
         return response()->json(['status' => '200', 'data' => $tableData , 'message' => 'All your data from '.$tableName]);
     }
 
