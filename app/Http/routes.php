@@ -24,6 +24,14 @@ Route::get('/home', 'HomeController@index');
 
 /**
  * -----------------------------------------------------
+ * Log out
+ * -----------------------------------------------------
+ */
+
+Route::get('/log-out', 'AuthenticateController@logOut');
+
+/**
+ * -----------------------------------------------------
  * Sign in
  * -----------------------------------------------------
  */
@@ -68,6 +76,11 @@ Route::get('/offers','OfferController@getAllOffers');
 Route::get('/offers/{id}','OfferController@show')->where(['id' => '[0-9]+']);
 
 
+/**
+ * -----------------------------------------------------
+ * Tables
+ * -----------------------------------------------------
+ */
 Route::post('/table/test', ['uses' =>'TableController@testTable'])->middleware('cors');
 
 Route::post('/test/jables', ['middleware' => 'cors', function(Request $request)
