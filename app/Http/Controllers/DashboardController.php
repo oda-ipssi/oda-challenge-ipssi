@@ -62,11 +62,31 @@ class DashboardController extends Controller
         $activeRegisteredNumber = $this->userRepository->getRegisteredUsersNumber();
 
 
-        return $this->helper->createResponse(,200,'Success');
+        return $this->helper->createResponse(['number' => $activeUsersNumber, 'total_admin' => $activeAdminNumber, 'total_customer' => $activeCustomerNumber, 'total_registered' => $activeRegisteredNumber],200,'Success');
     }
 
     public function getValidOrdersNumber() {
-        return $this->helper->createResponse($this->orderRepository->getValidOrdersNumber(),200,'Success');
+
+        $validOrdersNumber = $this->orderRepository->getValidOrdersNumber();
+        $validOrdersSum = $this->orderRepository->getValidOrdersSum();
+        $validOrdersNumberSub1 = $this->orderRepository->getValidOrdersNumberSub1();
+        $validOrdersNumberSub2 = $this->orderRepository->getValidOrdersNumberSub2();
+        $validOrdersNumberSub3 = $this->orderRepository->getValidOrdersNumberSub3();
+
+        $validOrdersSumSub1 = $this->orderRepository->getValidOrdersSumSub1();
+        $validOrdersSumSub2 = $this->orderRepository->getValidOrdersSumSub2();
+        $validOrdersSumSub3 = $this->orderRepository->getValidOrdersSumSub3();
+
+        return $this->helper->createResponse(
+            [   'number' => $validOrdersNumber,
+                'sum' => $validOrdersSum,
+                'total_sub1' => $validOrdersNumberSub1,
+                'total_sub2' => $validOrdersNumberSub2,
+                'total_sub3' => $validOrdersNumberSub3,
+                'sum_sub1' => $validOrdersSumSub1,
+                'sum_sub2' => $validOrdersSumSub2,
+                'sum_sub3' => $validOrdersSumSub3
+            ],200,'Success');
     }
 
 

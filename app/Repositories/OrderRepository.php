@@ -45,15 +45,86 @@ class OrderRepository
 
     }
 
-
+    /**
+     * @return mixed
+     */
     public function getValidOrdersNumber()
     {
         return Order::where('status',Order::STATUS_OK)->count();
     }
 
+    /**
+     * @return mixed
+     */
     public function getValidOrdersSum()
     {
         return Order::where('status',Order::STATUS_OK)->sum('price');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValidOrdersNumberSub1()
+    {
+        return Order::where([
+            ['status',Order::STATUS_OK],
+            ['offer_id',1]
+        ])->count();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValidOrdersNumberSub2()
+    {
+        return Order::where([
+            ['status',Order::STATUS_OK],
+            ['offer_id',2]
+        ])->count();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValidOrdersNumberSub3()
+    {
+        return Order::where([
+            ['status',Order::STATUS_OK],
+            ['offer_id',3]
+        ])->count();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValidOrdersSumSub1()
+    {
+        return Order::where([
+            ['status',Order::STATUS_OK],
+            ['offer_id',1]
+        ])->sum('price');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValidOrdersSumSub2()
+    {
+        return Order::where([
+            ['status',Order::STATUS_OK],
+            ['offer_id',2]
+        ])->sum('price');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValidOrdersSumSub3()
+    {
+        return Order::where([
+            ['status',Order::STATUS_OK],
+            ['offer_id',3]
+        ])->sum('price');
     }
 
 
