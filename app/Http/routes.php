@@ -152,13 +152,9 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
          * -----------------------------------------------------
          */
 
-        Route::get('dashboard/users', 'DashboardController@getAllUsersNumber')->name('dashboard_users');
-
         Route::get('dashboard/active-users', 'DashboardController@getActiveUsersNumber')->name('dashboard_active_users');
 
         Route::get('dashboard/valid-orders', 'DashboardController@getValidOrdersNumber')->name('dashboard_valid_order');
-
-        Route::get('dashboard/valid-orders/sum', 'DashboardController@getValidOrdersSum')->name('dashboard_valid_order_sum');
 
         Route::get('dashboard/databases', 'DashboardController@getDatabasesNumber')->name('dashboard_databases');
 

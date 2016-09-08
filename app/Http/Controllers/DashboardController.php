@@ -44,21 +44,22 @@ class DashboardController extends Controller
     }
 
 
-    public function getAllUsersNumber() {
-        return $this->helper->createResponse($this->userRepository->getAllUsersNumber(),200,'Success');
-    }
 
     public function getActiveUsersNumber() {
-        return $this->helper->createResponse($this->userRepository->getActiveUsersNumber(),200,'Success');
+
+        $activeUsersNumber = $this->userRepository->getActiveUsersNumber();
+        $activeAdminNumber = $this->userRepository->getAdminUsersNumber();
+        $activeCustomerNumber = $this->userRepository->getCustomerUsersNumber();
+        $activeRegisteredNumber = $this->userRepository->getRegisteredUsersNumber();
+
+
+        return $this->helper->createResponse(,200,'Success');
     }
 
     public function getValidOrdersNumber() {
         return $this->helper->createResponse($this->orderRepository->getValidOrdersNumber(),200,'Success');
     }
 
-    public function getValidOrdersSum() {
-        return $this->helper->createResponse($this->orderRepository->getValidOrdersSum(),200,'Success');
-    }
 
     public function getDatabasesNumber() {
 
