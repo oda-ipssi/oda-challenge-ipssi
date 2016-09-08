@@ -40,6 +40,13 @@ Route::get('/logout', 'AuthenticateController@logOut');
 
 /**
  * -----------------------------------------------------
+ * Contact
+ * -----------------------------------------------------
+ */
+Route::post('/contact', 'ContactController@saveContactMessage');
+
+/**
+ * -----------------------------------------------------
  * Registration
  * -----------------------------------------------------
  */
@@ -75,6 +82,8 @@ Route::get('/offers','OfferController@getAllOffers');
 
 Route::get('/offers/{id}','OfferController@show')->where(['id' => '[0-9]+']);
 
+Route::post('/table/test', ['uses' =>'TableController@testTable']);
+
 
 /**
  * -----------------------------------------------------
@@ -93,6 +102,7 @@ Route::post('/test/jables', ['middleware' => 'cors', function(Request $request)
 
 Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
+
     /**
      * -----------------------------------------------------
      * Test
@@ -103,6 +113,12 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
     Route::get('test/scan', 'TestController@scanPermissions');
 
+    /**
+     * -----------------------------------------------------
+     * Check if current user is an admin
+     * -----------------------------------------------------
+     */
+    Route::get('is-admin', 'UsersController@isAdmin');
 
     /**
      * -----------------------------------------------------
@@ -172,7 +188,6 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
         Route::get('dashboard/messages', 'DashboardController@getContactMessages')->name('dashboard_contact_messages');
 
 
-
     });
 
     Route::group(['middleware' => ['customer'], 'prefix' => 'customer'], function() {
@@ -230,9 +245,12 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
 Route::get('/validate/{id}/{idOffer}', 'SubscriptionController@validatePayment')->where(['id' => '[0-9]+']);
 
-/**
- * Own user Table Management
- *
- */
-Route::get('/table', ['uses' =>'TableController@storeTable']);
+Route::post('/create/table', ['uses' =>'TableController@storeTable']);
+
+Route::get('/up/table', ['uses' =>'TableController@populateTable']);
+
+Route::get('/get/user-table', ['uses' =>'TableController@getDataTable']);
+
+Route::get('/get-data/user-table', ['uses' =>'TableController@getDataForChoosenTable']);
+
 

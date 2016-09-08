@@ -10,9 +10,11 @@ namespace App\Http\Services;
 
 
 use App\Models\User;
+use App\Repositories\UserRepository;
 use Illuminate\Contracts\Validation\UnauthorizedException;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use JWTAuth;
 
 
 class Helper
@@ -61,10 +63,10 @@ class Helper
     /**
      * @param $idUser
      */
-    public function checkUser($idUser) {
+    public function checkCurrentUser($idUser) {
         $user = JWTAuth::parseToken()->authenticate();
         if($user->id != $idUser) {
-            throw new UnauthorizedException;
+            throw new UnauthorizedException("Oups...you are not allowed to be there !");
         }
     }
 
