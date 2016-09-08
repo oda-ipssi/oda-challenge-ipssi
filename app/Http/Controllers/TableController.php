@@ -13,8 +13,7 @@ use App\Http\Requests\UserRequest;
 
 use Schema;
 use Illuminate\Support\Facades\DB;
-// use DB;
-
+use JWTAuth;
 use App\Http\Requests;
 
 class TableController extends Controller
@@ -35,6 +34,7 @@ class TableController extends Controller
         $dataArray = json_decode($request->getContent());
         $data = json_encode($dataArray);
         $name = $dataArray->data->tableName ."_ODA_".$user->id;
+
         $this->table = TableManager::getInstance($name, $data);
 
         if (Schema::hasTable($this->table->tableName)) {
