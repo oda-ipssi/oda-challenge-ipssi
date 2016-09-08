@@ -106,7 +106,9 @@ class SubscriptionController extends Controller
     public function subscriptionFactory(Request $request) {
 
         $token= $request->all()['token'];
-        $offerId = $request->get('data')['offerId'];
+        $offerId = $request->get('offerId');
+
+        //$offerId = $request->get('data')['offerId'];
         $order = isset($request->get('data')['order']) ? $request->get('data')['order'] : null;
 
         $offer = Offer::find($offerId);
