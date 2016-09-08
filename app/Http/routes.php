@@ -22,13 +22,6 @@ Route::get('/', 'IndexController@index');
 
 Route::get('/home', 'HomeController@index');
 
-/**
- * -----------------------------------------------------
- * Log out
- * -----------------------------------------------------
- */
-
-Route::get('/log-out', 'AuthenticateController@logOut');
 
 /**
  * -----------------------------------------------------
@@ -91,11 +84,15 @@ Route::post('/test/jables', ['middleware' => 'cors', function(Request $request)
 }]);
 
 
-
-
 Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
+    /**
+     * -----------------------------------------------------
+     * Log out
+     * -----------------------------------------------------
+     */
 
+    Route::get('/logout', 'AuthenticateController@logOut');
 
     /**
      * -----------------------------------------------------
