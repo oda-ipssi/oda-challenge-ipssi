@@ -244,7 +244,8 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
  * Payment Validation
  * -----------------------------------------------------
  */
-Route::post('/validate', 'SubscriptionController@validatePayment');
+Route::get('/validate/{id}/{idOffer}', 'SubscriptionController@validatePayment')->where(['id' => '[0-9]+']);
+
 
 
 
