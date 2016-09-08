@@ -207,19 +207,22 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
     Route::get('/downloadInvoice/{id}', 'SubscriptionController@downloadInvoice')->where(['id' => '[0-9]+']);
 
-
     /**
      * -----------------------------------------------------
      * Payment
      * -----------------------------------------------------
      */
 
-    Route::get('/payment','PaymentController@index');
+    Route::get('/payment/{id}','PaymentController@index')->where(['id' => '[0-9]+']);
 
-    Route::get('/payment/{id}/{mode?}','PaymentController@generateForm')->where(['id' => '[0-9]+']);
+    Route::get('/checkout/{id}','PaymentController@generateForm')->where(['id' => '[0-9]+'])->name('payment');
 
 
 });
+
+
+
+
 
 /**
  * Own user Table Management
