@@ -33,6 +33,13 @@ Route::post('/sign-in', 'AuthenticateController@authenticate');
 
 /**
  * -----------------------------------------------------
+ * Log out
+ * -----------------------------------------------------
+ */
+Route::get('/logout', 'AuthenticateController@logOut');
+
+/**
+ * -----------------------------------------------------
  * Registration
  * -----------------------------------------------------
  */
@@ -85,14 +92,6 @@ Route::post('/test/jables', ['middleware' => 'cors', function(Request $request)
 
 
 Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
-
-    /**
-     * -----------------------------------------------------
-     * Log out
-     * -----------------------------------------------------
-     */
-
-    Route::get('/logout', 'AuthenticateController@logOut');
 
     /**
      * -----------------------------------------------------
