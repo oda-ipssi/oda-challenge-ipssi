@@ -17,10 +17,9 @@ class TableManager
 
 
     /**
-     * Declaring useful parameters used in the class
      * @var
      */
-    public  $datas;
+    public  $data;
     private $userId;
     public $tableName;
 
@@ -28,13 +27,15 @@ class TableManager
     /**
      * TableManager constructor.
      * @param $name
+     * @param $data
      */
-    private function __construct($name)
+    private function __construct($name,$data)
     {
         //$this->userID = $id;
+
         $this->tableName = $name;
-        if(is_null($this->datas)){
-            $this->loadData();
+        if(is_null($this->data)){
+            $this->loadData($data);
         }
     }
 
@@ -43,24 +44,22 @@ class TableManager
      * @param $name
      * @return TableManager|null
      */
-    public static function getInstance($name)
+    public static function getInstance($name,$data)
     {
         if(is_null(self::$_instance)) {
-            self::$_instance = new TableManager($name);
+            self::$_instance = new TableManager($name,$data);
         }
         return self::$_instance;
     }
 
 
     /**
-     * load data in the json object given
+     * @param $data
      * @return mixed
      */
-    private function loadData()
+    private function loadData($data)
     {
-        /*Method to load data*/
-
-        return $this->datas = json_decode(file_get_contents("https://api.myjson.com/bins/10dyk"));
+        return $this->data = $data;
 
     }
 
@@ -68,8 +67,42 @@ class TableManager
     /**
      * @return path
      */
-    public function saveData()
+    public function saveSchema($originalData = null)
     {
-        file_put_contents(database_path()."/jables/".$this->tableName.".json", json_encode($this->data));
+        if(!is_dir(database_path()."/jables/")){
+            mkdir(database_path()."/jables/",0775);
+        }
+        $primaryKey =  ["type" => "integer","default" => "", "nullable" => false,"primary" => true,"unique" => true, "ai" => true ];
+        $myData = json_decode($this->data,true)['data'];
+        $data = array("fields" => $myData["fields"]);
+        foreach ($data["fields"] as &$elem){
+            if(array_key_exists("foreign",$elem) && $elem["foreign"] == ""){
+                unset($elem["foreign"]);
+            }
+        }
+        $data["fields"]["id"] = $primaryKey;
+        if(!is_null($originalData)){
+            $finalData['fields'] = array_merge($data['fields'],$originalData['fields']);
+        }
+        else{
+            $finalData = $data;
+        }
+        if(file_exists(database_path()."/jables/".$this->tableName.".json")){
+            unlink(realpath(database_path()."/jables/".$this->tableName.".json"));
+        }
+        if (file_put_contents(database_path()."/jables/".$this->tableName.".json", json_encode($finalData))) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+
+    public function saveData($table,$data){
+        $db = DB::table($table);
+        $db->insert(
+           $data
+        );
     }
 }
