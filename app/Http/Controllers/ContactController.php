@@ -23,6 +23,18 @@ class ContactController extends Controller
     private $helper;
 
     /**
+     * ContactController constructor.
+     * @param ContactRepository $contactRepository
+     * @param Helper $helper
+     */
+    public function __construct(ContactRepository $contactRepository, Helper $helper)
+    {
+        $this->contactRepository = $contactRepository;
+        $this->helper = $helper;
+    }
+
+
+    /**
      * @param ContactRequest $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
@@ -36,7 +48,6 @@ class ContactController extends Controller
         $contact->save();
 
         return $this->helper->createResponse([], 200, trans("contact.get", [], "contact"));
-
 
     }
 

@@ -2,7 +2,6 @@
 namespace App\Repositories;
 
 use App\Models\Contact;
-use App\Models\Offer;
 
 /**
  * Class ContactRepository
@@ -21,7 +20,7 @@ class ContactRepository
         $contact = new Contact();
         $contact->name = $name;
         $contact->email = $email;
-        $contact->message = $message();
+        $contact->message = $message;
 
         return $contact;
     }

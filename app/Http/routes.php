@@ -40,6 +40,13 @@ Route::get('/logout', 'AuthenticateController@logOut');
 
 /**
  * -----------------------------------------------------
+ * Contact
+ * -----------------------------------------------------
+ */
+Route::post('/contact', 'ContactController@saveContactMessage');
+
+/**
+ * -----------------------------------------------------
  * Registration
  * -----------------------------------------------------
  */
@@ -179,7 +186,6 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
         Route::get('dashboard/email', 'DashboardController@getEmailFromActiveUsers')->name('dashboard_email_active_users');
 
         Route::get('dashboard/messages', 'DashboardController@getContactMessages')->name('dashboard_contact_messages');
-
 
 
     });
