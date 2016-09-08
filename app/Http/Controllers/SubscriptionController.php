@@ -134,13 +134,21 @@ class SubscriptionController extends Controller
         }
     }
 
-    public function validatePayment(Request $request){
-        $myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
-        $txt = "John Doe\n";
-        fwrite($myfile, $txt);
-        $txt = "Jane Doe\n";
-        fwrite($myfile, $txt);
-        fclose($myfile);
+    public function validatePayment($id,$idOffer,Request $request){
+        $user = User::find($id);
+        $offer = Offer::find($idOffer);
+        $order = Order::where([['user_id',$id],['offer_id',$idOffer]])->first();
+        if(!empty($request->all())){
+            if($order != null){
+                $this->updateSubscription($order,$user,$offer);
+            } else {
+                $this->createSubscription($user, $offer);
+            }
+        }
+
+        header("Location: http://localhost:9000/");
+        die();
+
     }
 
     /**
@@ -225,6 +233,5 @@ class SubscriptionController extends Controller
         return $this->helper->createResponse($html, 200, trans('order.invoice.success', [], 'order'));
 
     }
-
 
 }
