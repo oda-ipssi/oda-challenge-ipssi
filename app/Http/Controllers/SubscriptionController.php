@@ -103,9 +103,16 @@ class SubscriptionController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function subscriptionFactory($offerId, Order $order = null, Request $request) {
+    public function subscriptionFactory(Request $request) {
+
+        $token= $request->all()['token'];
+        $offerId = $request->get('offerId');
+
+        //$offerId = $request->get('data')['offerId'];
+        $order = isset($request->get('data')['order']) ? $request->get('data')['order'] : null;
 
         $offer = Offer::find($offerId);
+
 
         $user = JWTAuth::parseToken()->authenticate();
 
@@ -119,13 +126,21 @@ class SubscriptionController extends Controller
                     }
                     break;
                 default:
-                    // TODO redirect to payment
-                    return $this->helper->createResponse([], 404, 'REDIRECT TO PAYMENT');
+                    return redirect()->route('checkout', ['id' => $offerId, 'token' => $token ]);
             }
         } else {
             $request->getSession()->set('user-registration-offer', $offerId);
             return redirect()->route('registration');
         }
+    }
+
+    public function validatePayment(Request $request){
+        $myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
+        $txt = "John Doe\n";
+        fwrite($myfile, $txt);
+        $txt = "Jane Doe\n";
+        fwrite($myfile, $txt);
+        fclose($myfile);
     }
 
     /**
@@ -151,8 +166,10 @@ class SubscriptionController extends Controller
         //to modify to get data
         $offerId = $request->get('offerId');
 
+        $offer = Offer::findOrFail($offerId);
+
         if($order->offer_id != $offerId && $userId == $user->id){
-            $response = $this->subscriptionFactory($offerId,$order);
+            $response = $this->updateSubscription($order,$user,$offer);
 
             return $response;
         } else {
@@ -203,30 +220,9 @@ class SubscriptionController extends Controller
         $html = $view->render();
 
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML($html)->save($this->generatePdfName($user, $payment));
+        $pdf->loadHTML($html)->save($this->helper->generatePdfName($user, $payment));
 
-        return  response()->json($html, 200, ['Response Ok']);
-
-    }
-
-
-    /**
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getAllOrders(){
-        $orders = DB::table('orders')->orderBy('created_at', 'desc')->get();
-
-        return response()->json(['orders' => $orders], 200, ['OK']);
-    }
-
-    /**
-     * @param User $user
-     * @param Payment $payment
-     * @return string
-     */
-    private function generatePdfName(User $user, $payment) {
-
-        return 'invoice_'.$user->username.'_'.$user->id.'_'.substr($payment->created_at,0, 10).'.pdf';
+        return $this->helper->createResponse($html, 200, trans('order.invoice.success', [], 'order'));
 
     }
 

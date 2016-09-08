@@ -40,7 +40,7 @@ class UsersController extends Controller
      * @param  UserRequest $userRequest
      * @return \Illuminate\Http\Response
      */
-    public function createUser(UserRequest $userRequest) {
+    public function createUser(Request $userRequest) {
 
         $newUser = $this->userRepository->createUser($userRequest->get('data'));
         $newUser->save();

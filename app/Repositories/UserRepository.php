@@ -3,12 +3,26 @@ namespace App\Repositories;
 
 use App\Models\User;
 use Illuminate\Hashing\BcryptHasher;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class UserRepository
  */
 class UserRepository
 {
+
+
+    /**
+     * @return int
+     */
+    public function getAllUsersNumber(){
+        return User::all()->count();
+    }
+
+    public function getActiveUsersNumber(){
+        return User::where('is_active',1)->count();
+    }
+
     /**
      * @param $data
      * @param User $user
@@ -72,6 +86,48 @@ class UserRepository
     public function validateUser(User $user){
         $user->is_active = 1;
         return $user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmailFromActiveUsers() {
+
+        return DB::table('users')->where('is_active', true)->get();
+
+    }
+
+    public function getAdminUsersNumber()
+    {
+        return DB::table('users')
+            ->join('role_user', 'users.id', '=', 'role_user.user_id')
+            ->join('roles','roles.id', '=', 'role_user.role_id')
+            ->where([
+                ['roles.id', 1],
+                ['users.is_active',1]
+            ])->count();
+    }
+
+    public function getCustomerUsersNumber()
+    {
+        return DB::table('users')
+            ->join('role_user', 'users.id', '=', 'role_user.user_id')
+            ->join('roles','roles.id', '=', 'role_user.role_id')
+            ->where([
+                ['roles.id', 2],
+                ['users.is_active',1]
+            ])->count();
+    }
+
+    public function getRegisteredUsersNumber()
+    {
+        return DB::table('users')
+            ->join('role_user', 'users.id', '=', 'role_user.user_id')
+            ->join('roles','roles.id', '=', 'role_user.role_id')
+            ->where([
+                ['roles.id', 4],
+                ['users.is_active',1]
+            ])->count();
     }
 
 }

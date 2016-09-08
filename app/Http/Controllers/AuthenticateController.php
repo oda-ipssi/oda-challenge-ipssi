@@ -2,13 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
-
+use JWTAuth;
 class AuthenticateController extends Controller
 {
+
+    /**
+     * @var Helper $helper
+     */
+    private $helper;
+
+    /**
+     * AuthenticateController constructor.
+     * @param Helper $helper
+     */
+    public function __construct(Helper $helper)
+    {
+        $this->helper = $helper;
+    }
 
     /**
      * @param Request $request
@@ -37,6 +51,20 @@ class AuthenticateController extends Controller
         $idSession = $request->getSession()->getId();
 
         return response()->json(compact('token', 'user', 'idSession'));
+
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function logOut(Request $request) {
+
+        if(JWTAuth::invalidate(JWTAuth::getToken()) === true) {
+         return $this->helper->createResponse([], 200, 'logout.ok');
+        } else {
+            return $this->helper->createResponse([], 422, 'logout.not.ok');
+        }
 
     }
 
