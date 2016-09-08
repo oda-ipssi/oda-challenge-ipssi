@@ -44,7 +44,7 @@ class AccountController extends Controller
      */
     public function show($id)
     {
-        $this->helper->checkUser($id);
+        $this->helper->checkCurrentUser($id);
         try{
             $user = User::findOrFail($id);
             return $this->helper->createResponse($user, 200, trans("user.response.ok", [], 'user'));
@@ -65,7 +65,7 @@ class AccountController extends Controller
      */
     public function update($id, UserRequest $userRequest)
     {
-        $this->helper->checkUser($id);
+        $this->helper->checkCurrentUser($id);
 
         try{
             $accountUser = $this->userRepository->editUserInformation($userRequest->get('data'), User::findOrFail($id));
@@ -86,7 +86,7 @@ class AccountController extends Controller
     public function editPassword($id, Request $request)
     {
 
-        $this->helper->checkUser($id);
+        $this->helper->checkCurrentUser($id);
 
         $password = $request->get('data')['password'];
         $newPassword = $request->get('data')['new_password'];
