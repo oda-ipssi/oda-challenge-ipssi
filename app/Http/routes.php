@@ -225,11 +225,11 @@ Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
 
     Route::get('/payment/{id}','PaymentController@index')->where(['id' => '[0-9]+']);
 
-    Route::get('/checkout/{id}','PaymentController@generateForm')->where(['id' => '[0-9]+'])->name('payment');
+    Route::get('/checkout/{id}','PaymentController@generateForm')->where(['id' => '[0-9]+'])->name('checkout');
+
 
 
 });
-
 
 
 
