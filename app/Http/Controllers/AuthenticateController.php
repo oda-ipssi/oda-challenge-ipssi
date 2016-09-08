@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use JWTAuth;
-
 class AuthenticateController extends Controller
 {
 
@@ -43,6 +42,7 @@ class AuthenticateController extends Controller
     public function logOut(Request $request) {
 
         JWTAuth::invalidate(JWTAuth::getToken());
+
     }
 
 }
