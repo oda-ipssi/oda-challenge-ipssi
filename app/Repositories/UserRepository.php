@@ -56,6 +56,7 @@ class UserRepository
         $user = $this->editUserInformation($data,$user);
         $user = $this->editUserPassword($data['password'],$user);
 
+
         $user->is_active = isset($data['is_active']) ? $data['is_active'] : 0;
         $now = new \DateTime();
         $user->validation_token = md5($now->format('YmdHis'));

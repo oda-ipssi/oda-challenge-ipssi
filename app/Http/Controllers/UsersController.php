@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Services\Helper;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Repositories\UserRepository;
@@ -82,9 +83,14 @@ class UsersController extends Controller
         $user = JWTAuth::parseToken()->authenticate();
         $role = $this->userRepository->getUserRole($user->id);
 
-        if($role->name == self::ADMIN_NAME) {
-            return $this->helper->createResponse(['is_admin' => true], 200, trans('user.is_admin'));
+        if($role != null) {
+            if($role->name == self::ADMIN_NAME) {
+                return $this->helper->createResponse(['is_admin' => true], 200, trans('user.is_admin'));
+            }
+        } else {
+            return $this->helper->createResponse(['is_admin' => false], 200, trans('user.is_not_admin'));
         }
+
         return $this->helper->createResponse(['is_admin' => false], 200, trans('user.is_not_admin'));
     }
 
