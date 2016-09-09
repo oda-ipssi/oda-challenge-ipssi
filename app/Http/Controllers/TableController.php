@@ -46,7 +46,7 @@ class TableController extends Controller
         } else {
             // return save data
             $this->table->saveSchema();
-            \Illuminate\Support\Facades\Artisan::call('jables:refresh');
+            \Illuminate\Support\Facades\Artisan::call('jables');
 
             return response()->json(['status' => $this->status, 'data' => TableManager::getInstance($name, $data) , 'message' => 'Table created !']);
         }

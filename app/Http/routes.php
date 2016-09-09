@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * ----------------------------------------------------------------------------------------------------
  *
@@ -12,228 +13,230 @@
  * ----------------------------------------------------------------------------------------------------
  */
 
-/**
- * -----------------------------------------------------
- * Home
- * -----------------------------------------------------
- */
 
-Route::get('/', 'IndexController@index');
+Route::group(['middleware' => ['cors']], function() {
+    /**
+     * -----------------------------------------------------
+     * Home
+     * -----------------------------------------------------
+     */
 
-Route::get('/home', 'HomeController@index');
+    Route::get('/', 'IndexController@index');
 
-
-/**
- * -----------------------------------------------------
- * Sign in
- * -----------------------------------------------------
- */
-
-Route::post('/sign-in', 'AuthenticateController@authenticate');
-
-/**
- * -----------------------------------------------------
- * Log out
- * -----------------------------------------------------
- */
-Route::get('/logout', 'AuthenticateController@logOut');
-
-/**
- * -----------------------------------------------------
- * Contact
- * -----------------------------------------------------
- */
-Route::post('/contact', 'ContactController@saveContactMessage');
-
-/**
- * -----------------------------------------------------
- * Registration
- * -----------------------------------------------------
- */
-
-Route::post('/registration', ['uses' => 'UsersController@createUser'])->name('registration');
-
-/**
- * -----------------------------------------------------
- * Account validation
- * -----------------------------------------------------
- */
-
-Route::post('/validation/{token}', ['uses' => 'UsersController@validateUserAccount', 'as' => 'userValidation']);
-
-Route::get('/send/{id}', ['uses' =>'EmailController@sendEmailReminder', 'as'=>'reminderEmail']);
-
-/**
- * -----------------------------------------------------
- * Content
- * -----------------------------------------------------
- */
-
-Route::get('/content/{url}', ['uses' =>'ContentController@show']);
-
-
-/**
- * -----------------------------------------------------
- * Offers
- * -----------------------------------------------------
- */
-
-Route::get('/offers','OfferController@getAllOffers');
-
-Route::get('/offers/{id}','OfferController@show')->where(['id' => '[0-9]+']);
-
-Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function() {
+    Route::get('/home', 'HomeController@index');
 
 
     /**
      * -----------------------------------------------------
-     * Check if current user is an admin
+     * Sign in
      * -----------------------------------------------------
      */
-    Route::get('is-admin', 'UsersController@isAdmin');
+
+    Route::post('/sign-in', 'AuthenticateController@authenticate');
 
     /**
      * -----------------------------------------------------
-     * Roles, permission...
+     * Log out
+     * -----------------------------------------------------
+     */
+    Route::get('/logout', 'AuthenticateController@logOut');
+
+    /**
+     * -----------------------------------------------------
+     * Contact
+     * -----------------------------------------------------
+     */
+    Route::post('/contact', 'ContactController@saveContactMessage');
+
+    /**
+     * -----------------------------------------------------
+     * Registration
      * -----------------------------------------------------
      */
 
-    Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function() {
+    Route::post('/registration', ['uses' => 'UsersController@createUser'])->name('registration');
 
-        /**
-         * -----------------------------------------------------
-         * Content
-         * -----------------------------------------------------
-         */
+    /**
+     * -----------------------------------------------------
+     * Account validation
+     * -----------------------------------------------------
+     */
 
-        Route::get('/contents', ['uses' =>'ContentController@index']);
+    Route::post('/validation/{token}', ['uses' => 'UsersController@validateUserAccount', 'as' => 'userValidation']);
 
-        Route::post('/content/store', ['uses' =>'ContentController@store']);
+    Route::get('/send/{id}', ['uses' => 'EmailController@sendEmailReminder', 'as' => 'reminderEmail']);
 
-        Route::get('/content/{url}/edit', ['uses' =>'ContentController@edit']);
+    /**
+     * -----------------------------------------------------
+     * Content
+     * -----------------------------------------------------
+     */
 
-        Route::post('/content/{url}/update', ['uses' =>'ContentController@update']);
+    Route::get('/content/{url}', ['uses' => 'ContentController@show']);
 
-        Route::delete('/content/{id}', ['uses' =>'ContentController@destroy'])->where(['id' => '[0-9]+']);
 
-        /**
-         * -----------------------------------------------------
-         * Offers
-         * -----------------------------------------------------
-         */
+    /**
+     * -----------------------------------------------------
+     * Offers
+     * -----------------------------------------------------
+     */
 
-        Route::get('/offers','OfferController@getAllOffers');
+    Route::get('/offers', 'OfferController@getAllOffers');
 
-        Route::put('/offers/{id}', 'OfferController@update')->where(['id' => '[0-9]+']);
+    Route::get('/offers/{id}', 'OfferController@show')->where(['id' => '[0-9]+']);
 
-        Route::post('/offers', 'OfferController@create');
-
-        Route::delete('/offers/{id}','OfferController@delete')->where(['id' => '[0-9]+']);
-
-        /**
-         * -----------------------------------------------------
-         * Orders
-         * -----------------------------------------------------
-         */
-
-        Route::get('/orders','OrderController@getAllOrders');
-
-        Route::get('/orders/{id}','OrderController@show')->where(['id' => '[0-9]+']);;
-
-        Route::get('/orders/{id}/download','OrderController@downloadInvoice')->where(['id' => '[0-9]+']);
+    Route::group(['middleware' => ['jwt.auth', 'jwt.refresh']], function () {
 
 
         /**
          * -----------------------------------------------------
-         * Dashboard
+         * Check if current user is an admin
+         * -----------------------------------------------------
+         */
+        Route::get('is-admin', 'UsersController@isAdmin');
+
+        /**
+         * -----------------------------------------------------
+         * Roles, permission...
          * -----------------------------------------------------
          */
 
-        Route::get('dashboard/active-users', 'DashboardController@getActiveUsersNumber')->name('dashboard_active_users');
+        Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
 
-        Route::get('dashboard/valid-orders', 'DashboardController@getValidOrdersNumber')->name('dashboard_valid_order');
+            /**
+             * -----------------------------------------------------
+             * Content
+             * -----------------------------------------------------
+             */
 
-        Route::get('dashboard/databases', 'DashboardController@getDatabasesNumber')->name('dashboard_databases');
+            Route::get('/contents', ['uses' => 'ContentController@index']);
 
-        Route::get('dashboard/email', 'DashboardController@getEmailFromActiveUsers')->name('dashboard_email_active_users');
+            Route::post('/content/store', ['uses' => 'ContentController@store']);
 
-        Route::get('dashboard/messages', 'DashboardController@getContactMessages')->name('dashboard_contact_messages');
+            Route::get('/content/{url}/edit', ['uses' => 'ContentController@edit']);
 
+            Route::post('/content/{url}/update', ['uses' => 'ContentController@update']);
+
+            Route::delete('/content/{id}', ['uses' => 'ContentController@destroy'])->where(['id' => '[0-9]+']);
+
+            /**
+             * -----------------------------------------------------
+             * Offers
+             * -----------------------------------------------------
+             */
+
+            Route::get('/offers', 'OfferController@getAllOffers');
+
+            Route::put('/offers/{id}', 'OfferController@update')->where(['id' => '[0-9]+']);
+
+            Route::post('/offers', 'OfferController@create');
+
+            Route::delete('/offers/{id}', 'OfferController@delete')->where(['id' => '[0-9]+']);
+
+            /**
+             * -----------------------------------------------------
+             * Orders
+             * -----------------------------------------------------
+             */
+
+            Route::get('/orders', 'OrderController@getAllOrders');
+
+            Route::get('/orders/{id}', 'OrderController@show')->where(['id' => '[0-9]+']);;
+
+            Route::get('/orders/{id}/download', 'OrderController@downloadInvoice')->where(['id' => '[0-9]+']);
+
+
+            /**
+             * -----------------------------------------------------
+             * Dashboard
+             * -----------------------------------------------------
+             */
+
+            Route::get('dashboard/active-users', 'DashboardController@getActiveUsersNumber')->name('dashboard_active_users');
+
+            Route::get('dashboard/valid-orders', 'DashboardController@getValidOrdersNumber')->name('dashboard_valid_order');
+
+            Route::get('dashboard/databases', 'DashboardController@getDatabasesNumber')->name('dashboard_databases');
+
+            Route::get('dashboard/email', 'DashboardController@getEmailFromActiveUsers')->name('dashboard_email_active_users');
+
+            Route::get('dashboard/messages', 'DashboardController@getContactMessages')->name('dashboard_contact_messages');
+
+
+        });
+
+        Route::group(['middleware' => ['customer'], 'prefix' => 'customer'], function () {
+
+            // Gestion des associate
+            Route::resource('associate', 'AssociateController', ['except' => [
+                'show', 'create', 'edit'
+            ]]);
+
+        });
+
+        /**
+         * -----------------------------------------------------
+         * Account
+         * -----------------------------------------------------
+         */
+
+        Route::put('/account/{id}/password', 'AccountController@editPassword')->where(['id' => '[0-9]+']);
+
+        Route::get('/account/{id}', 'AccountController@show')->where(['id' => '[0-9]+']);
+
+        Route::put('/account/{id}', 'AccountController@update')->where(['id' => '[0-9]+']);
+
+
+        /**
+         * -----------------------------------------------------
+         * Subscription
+         * -----------------------------------------------------
+         */
+
+        Route::get('/subscription', 'SubscriptionController@getOrder');
+
+        Route::post('/subscription', 'SubscriptionController@subscriptionFactory');
+
+        Route::delete('/subscription/{id}', 'SubscriptionController@deleteSubscription')->where(['id' => '[0-9]+']);
+
+        Route::put('/subscription/{id}', 'SubscriptionController@changeSubscription')->where(['id' => '[0-9]+']);
+
+        Route::put('/subscription/{id}/stop', 'SubscriptionController@stopSubscription')->where(['id' => '[0-9]+']);
+
+        Route::get('/downloadInvoice/{id}', 'SubscriptionController@downloadInvoice')->where(['id' => '[0-9]+']);
+
+        /**
+         * -----------------------------------------------------
+         * Payment
+         * -----------------------------------------------------
+         */
+
+        Route::get('/payment/{id}', 'PaymentController@index')->where(['id' => '[0-9]+']);
+
+        Route::get('/checkout/{id}', 'PaymentController@generateForm')->where(['id' => '[0-9]+'])->name('checkout');
+
+        /**
+         * -----------------------------------------------------
+         * MVP
+         * -----------------------------------------------------
+         */
+        Route::post('/create/table', ['uses' => 'TableController@storeTable']);
+
+        Route::post('/up/table', ['uses' => 'TableController@populateTable']);
+
+        Route::post('/get/user-table', ['uses' => 'TableController@getDataTable']);
+
+        Route::post('/get-data/user-table', ['uses' => 'TableController@getDataForChoosenTable']);
 
     });
 
-    Route::group(['middleware' => ['customer'], 'prefix' => 'customer'], function() {
-
-        // Gestion des associate
-        Route::resource('associate', 'AssociateController', ['except' => [
-            'show', 'create', 'edit'
-        ]]);
-
-    });
-
     /**
      * -----------------------------------------------------
-     * Account
+     * Payment Validation
      * -----------------------------------------------------
      */
+    Route::get('/validate/{id}/{idOffer}', 'SubscriptionController@validatePayment')->where(['id' => '[0-9]+']);
 
-    Route::put('/account/{id}/password', 'AccountController@editPassword')->where(['id' => '[0-9]+']);
-
-    Route::get('/account/{id}', 'AccountController@show')->where(['id' => '[0-9]+']);
-
-    Route::put('/account/{id}', 'AccountController@update')->where(['id' => '[0-9]+']);
-
-
-    /**
-     * -----------------------------------------------------
-     * Subscription
-     * -----------------------------------------------------
-     */
-
-    Route::get('/subscription', 'SubscriptionController@getOrder');
-
-    Route::post('/subscription','SubscriptionController@subscriptionFactory');
-
-    Route::delete('/subscription/{id}','SubscriptionController@deleteSubscription')->where(['id' => '[0-9]+']);
-
-    Route::put('/subscription/{id}','SubscriptionController@changeSubscription')->where(['id' => '[0-9]+']);
-
-    Route::put('/subscription/{id}/stop','SubscriptionController@stopSubscription')->where(['id' => '[0-9]+']);
-
-    Route::get('/downloadInvoice/{id}', 'SubscriptionController@downloadInvoice')->where(['id' => '[0-9]+']);
-
-    /**
-     * -----------------------------------------------------
-     * Payment
-     * -----------------------------------------------------
-     */
-
-    Route::get('/payment/{id}','PaymentController@index')->where(['id' => '[0-9]+']);
-
-    Route::get('/checkout/{id}','PaymentController@generateForm')->where(['id' => '[0-9]+'])->name('checkout');
-
-    /**
-     * -----------------------------------------------------
-     * MVP
-     * -----------------------------------------------------
-     */
-    Route::post('/create/table', ['uses' =>'TableController@storeTable']);
-
-    Route::post('/up/table', ['uses' =>'TableController@populateTable']);
-
-    Route::post('/get/user-table', ['uses' =>'TableController@getDataTable']);
-
-    Route::post('/get-data/user-table', ['uses' =>'TableController@getDataForChoosenTable']);
 
 });
-
-/**
- * -----------------------------------------------------
- * Payment Validation
- * -----------------------------------------------------
- */
-Route::get('/validate/{id}/{idOffer}', 'SubscriptionController@validatePayment')->where(['id' => '[0-9]+']);
-
-
-
 
